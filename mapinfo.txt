@@ -1,5 +1,5 @@
 GameInfo
 {
 	PlayerClasses = "fonPlayer"
-	StatusbarClass = "HNecroHUD"
+	StatusbarClass = "fonHUD"
 }
