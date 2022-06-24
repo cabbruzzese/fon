@@ -1,8 +1,7 @@
 const MAXXPHIT = 125;
 const XPMULTI = 1000;
-const STATNUM = 3;
+const STATNUM = 4;
 const START_HEALTH = 75;
-//const MAX_LEVEL_ARMOR = 60;
 const REGENERATE_TICKS_MAX_DEFAULT = 128;
 const REGENERATE_MIN_VALUE = 15;
 
@@ -31,6 +30,11 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
         Health START_HEALTH;
         Player.MaxHealth START_HEALTH;
+
+		Player.StartItem "HNecroWeaponStaff", 1;
+		Player.StartItem "fonSword", 1;
+		Player.StartItem "HNecroWeaponStaffAmmo", 50;
+		Player.StartItem "HNecroWeaponMorphAmmo", 100;
 	}
 
 	double GetScaledMod(int stat)
@@ -164,6 +168,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	
 	virtual void BasicStatIncrease(PlayerLevelItem statItem)
 	{
+		statItem.Strength += 1;
+		statItem.Magic += 1;
+		statItem.Dexterity += 1;
 	}
 
 	virtual void GiveLevelSkill(PlayerLevelItem statItem)

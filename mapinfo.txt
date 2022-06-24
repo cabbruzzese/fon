@@ -2,4 +2,5 @@ GameInfo
 {
 	PlayerClasses = "fonPlayer"
 	StatusbarClass = "fonHUD"
+	WeaponSlot = 1, "fonSword", "fonAxe"
 }

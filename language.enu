@@ -1,0 +1,4 @@
+[enu default]
+TAG_BAxe = "Battle Axe";
+
+PKUP_BAxe = "You acquire the Battle Axe";
