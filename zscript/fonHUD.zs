@@ -63,9 +63,9 @@ class fonHUD : HNecroHUD
 		DrawString(mHUDFontStats, text1, (xPos, yPos), DI_TEXT_ALIGN_LEFT);
 		DrawString(mHUDFontStats, text2, (xPos, yPos + yStep), DI_TEXT_ALIGN_LEFT);
 		
-		let statText1 = String.Format("Strength: %s", FormatNumber(statItem.Strength, 0));
-		let statText2 = String.Format("Armor: %s", FormatNumber(statItem.Dexterity, 0));
-		let statText3 = String.Format("Magic: %s", FormatNumber(statItem.Magic, 0));
+		let statText1 = String.Format("Vengeance: %s", FormatNumber(statItem.Strength, 0));
+		let statText2 = String.Format("Ferocity: %s", FormatNumber(statItem.Dexterity, 0));
+		let statText3 = String.Format("Scorn: %s", FormatNumber(statItem.Magic, 0));
 
 		//Stats
 		DrawString(mHUDFontStats, statText1, (xPosStats, yPos - yStep), DI_TEXT_ALIGN_RIGHT);

@@ -93,6 +93,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	const AMMO_MAX_PISTOL = 30;
 	const AMMO_MAX_GRENADE = 30;
 	const AMMO_MAX_SCYTHE = 50;
+	const AMMO_MAX_MORPH = 50;
 
 	int GetNewAmmoMax(int baseMax, int stat)
 	{
@@ -135,6 +136,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		SetAmmoTypeMax("HNecroWeaponPistolAmmo", AMMO_MAX_PISTOL, statItem.Strength);
 		SetAmmoTypeMax("HNecroWeaponGrenadeAmmo", AMMO_MAX_GRENADE, statItem.Strength);
 		SetAmmoTypeMax("HNecroWeaponScytheAmmo", AMMO_MAX_SCYTHE, statItem.Magic);
+		SetAmmoTypeMax("HNecroWeaponMorphAmmo", AMMO_MAX_MORPH, statItem.Dexterity);
 	}
 
 	void UpdateLevelStats(PlayerLevelItem statItem)
