@@ -2,3 +2,16 @@
 TAG_BAxe = "Battle Axe";
 
 PKUP_BAxe = "You acquire the Battle Axe";
+
+TXT_STRPICKUP = "Increase Vengeance";
+TXT_DEXPICKUP = "Increase Ferocity";
+TXT_MAGPICKUP = "Increase Scorn";
+TAG_STRPICKUP = "Increase Vengeance";
+TAG_DEXPICKUP = "Increase Ferocity";
+TAG_MAGPICKUP = "Increase Scorn";
+
+
+TXT_SKILLSTAFFCHARGE = "The Fireball Staff is powered with charge attacks.";
+TXT_SKILLSTAFFSPREAD = "The Fireball Staff is powered with scorching spray.";
+TXT_SKILLICEBREATH = "The Ice Ring is powered with Ice Breath.";
+TXT_SKILLTORNADOLIGHTNING = "The Tornado spell is powered with Lightning Strikes.";

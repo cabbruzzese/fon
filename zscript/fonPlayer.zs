@@ -1,9 +1,14 @@
 const MAXXPHIT = 125;
 const XPMULTI = 1000;
-const STATNUM = 4;
+const STATNUM = 5;
 const START_HEALTH = 75;
 const REGENERATE_TICKS_MAX_DEFAULT = 128;
 const REGENERATE_MIN_VALUE = 15;
+
+const STAFF_LEVEL_SPREAD = 12;
+const ICE_LEVEL_BREATH = 18;
+const STAFF_LEVEL_CHARGE = 24;
+const TORNADO_LEVEL_LIGHTNING = 30;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -24,14 +29,14 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		fonPlayer.RegenerateTicks 0;
 		fonPlayer.RegenerateTicksMax REGENERATE_TICKS_MAX_DEFAULT;
 
-		fonPlayer.InitStrength 5;//10;
-		fonPlayer.InitDexterity 5;//10;
-		fonPlayer.InitMagic 5;//10;
+		fonPlayer.InitStrength 5;
+		fonPlayer.InitDexterity 5;
+		fonPlayer.InitMagic 5;
 
         Health START_HEALTH;
         Player.MaxHealth START_HEALTH;
 
-		Player.StartItem "HNecroWeaponStaff", 1;
+		Player.StartItem "fonStaff", 1;
 		Player.StartItem "fonSword", 1;
 		Player.StartItem "HNecroWeaponStaffAmmo", 50;
 		Player.StartItem "HNecroWeaponMorphAmmo", 100;
@@ -139,9 +144,28 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		SetAmmoTypeMax("HNecroWeaponMorphAmmo", AMMO_MAX_MORPH, statItem.Dexterity);
 	}
 
+	const HEALTH_MAX_BASE = 50;
+	const HEALTH_MAX_STEP = 5;
+	void SetHealthMax (PlayerLevelItem statItem)
+	{
+		int maxHealthStep = HEALTH_MAX_STEP * statItem.Strength;
+		int maxHealthNew = HEALTH_MAX_BASE + maxHealthStep;
+		int healthDifference = maxHealthNew - MaxHealth;
+
+		MaxHealth = maxHealthNew;
+		statItem.MaxHealth = maxHealthNew;
+
+		if (Health < maxHealthNew)
+		{
+			int healthHealed = Min(maxHealthNew, Health + healthDifference);
+			A_SetHealth(healthHealed);
+		}
+	}
+
 	void UpdateLevelStats(PlayerLevelItem statItem)
 	{
 		SetAmmoMax(statItem);
+		SetHealthMax(statItem);
 		//Ammo max 
 		//Gain 1 AC (5%) per 10 Dex
 		//int armorMod = statItem.Dexterity / 2;
@@ -169,14 +193,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	}
 	
 	virtual void BasicStatIncrease(PlayerLevelItem statItem)
-	{
-		statItem.Strength += 1;
-		statItem.Magic += 1;
-		statItem.Dexterity += 1;
-	}
-
-	virtual void GiveLevelSkill(PlayerLevelItem statItem)
-	{
+	{		
 	}
 	
 	void DoBlend(Color color, float alpha, int tics)
@@ -194,16 +211,8 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	
 	void GainLevelHealth(PlayerLevelItem statItem)
 	{
-		//health increases by random up to half Strength, min 5 (weighted for low end of flat scale)
-		int halfStrength = statItem.Strength / 2;
-		int healthBonus = random[LvlHealth](1, halfStrength);
-		healthBonus = Max(healthBonus, 5);
-
-		int newHealth = MaxHealth + healthBonus;
-		MaxHealth = newHealth;
-		statItem.MaxHealth = newHealth;
 		if (Health < MaxHealth)
-			A_SetHealth(MaxHealth);
+		 	A_SetHealth(MaxHealth);
 	}
 
 	//Gain a level
@@ -216,39 +225,55 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		statItem.Exp = statItem.Exp - statItem.ExpNext;
 		statItem.ExpNext = CalcXpNeeded(statItem);
 		
-		//Distribute points randomly, giving weight to highest stats
-		int statPoints = STATNUM;
-		while (statPoints > 0)
-		{
-			int statStack = statItem.Strength + statItem.Dexterity + statItem.Magic;
-			
-			double rand = random[LvlStatStack](1, statStack);
-			if (rand <= statItem.Strength)
-			{
-				statItem.Strength += 1;
-			}
-			else if (rand <= statItem.Strength + statItem.Dexterity)
-			{
-				statItem.Dexterity += 1;
-			}
-			else
-			{
-				statItem.Magic += 1;
-			}
-			statPoints--;
-		}
+		A_GiveInventory("ExpStrItem", STATNUM);
+		A_GiveInventory("ExpDexItem", STATNUM);
+		A_GiveInventory("ExpMagItem", STATNUM);
 
 		if (!isNoBlend)
 			DoLevelGainBlend(statItem);
 		
 		//BasicStatIncrease to call overrides in classes
 		BasicStatIncrease(statItem);
-		//Give class specific items or skills
-		GiveLevelSkill(statItem);
-
+		
 		GainLevelHealth(statItem);
 			
 		UpdateLevelStats(statItem);
+	}
+
+	void XPStatIncrease(int StatType)
+	{
+		let statItem = GetStats();
+
+		if (StatType == STAT_TYPE_STR)
+			statItem.Strength += 1;
+		else if (StatType == STAT_TYPE_DEX)
+			statItem.Dexterity += 1;
+		else if (StatType == STAT_TYPE_MAG)
+		{
+			statItem.Magic += 1;
+			GiveMagicSkill(statItem.Magic);
+		}
+
+		UpdateLevelStats(statItem);
+	}
+
+	void GiveMagicSkill(int magicVal)
+	{
+		switch (magicVal)
+		{
+			case STAFF_LEVEL_CHARGE:
+				A_Print("$TXT_SKILLSTAFFCHARGE");
+				break;
+			case STAFF_LEVEL_SPREAD:
+				A_Print("$TXT_SKILLSTAFFSPREAD");
+				break;
+			case ICE_LEVEL_BREATH:
+				A_Print("$TXT_SKILLICEBREATH");
+				break;
+			case TORNADO_LEVEL_LIGHTNING:
+				A_Print("$TXT_SKILLTORNADOLIGHTNING");
+				break;
+		}
 	}
 
     void DoXPHit(Actor xpSource, int damage, name damagetype)
@@ -273,7 +298,6 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		Super.PostBeginPlay();
 
 		let statItem = GetStats();
-		GiveLevelSkill(statItem);
 		SetAmmoMax(statItem);
 
 		MaxHealth = statItem.MaxHealth;

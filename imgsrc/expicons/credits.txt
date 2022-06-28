@@ -1,0 +1,5 @@
+expback based on Journal graphic from HON interface pack
+
+XPSTA0 based on Sword pickup sprite from HON sprites pack
+XPDEA0 based on Morph icon from HON interface pack
+XPMAA0 based on Staff pickup sprite form HON sprites pack
