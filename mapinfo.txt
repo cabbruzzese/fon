@@ -6,4 +6,6 @@ GameInfo
 	WeaponSlot = 2, "fonStaff"
 	WeaponSlot = 3, "fonIceRing"
 	WeaponSlot = 4, "fonTornado"
+
+	AddEventHandlers = "BossMaker"
 }

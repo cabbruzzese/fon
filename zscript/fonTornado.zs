@@ -129,3 +129,21 @@ class TornadoLightningMissile : FastProjectile
 		}
 	}
 }
+
+class fonTornadoShot : HNecroWeaponTornadoShot replaces HNecroWeaponTornadoShot
+{
+	override int DoSpecialDamage (Actor target, int damage, Name damagetype)
+	{
+		let t=target;
+		if (!t.bDontThrust)
+		{
+			t.angle += Random2[WhirlwindDamage]() * (360 / 4096.);
+			t.Vel.X += Vel.X / 4.;
+			t.Vel.Y += Vel.Y / 4.;
+		}
+
+		if (!(Level.maptime & 8))
+			t.DamageMobj (null, self.target, random(5, 7), 'Melee');
+		return -1;
+	}
+}

@@ -13,3 +13,8 @@ const DEBUG_MODE = 0;
 #include "zscript/fonTornado.zs"
 #include "zscript/fonMeleeWeapon.zs"
 #include "zscript/fonHealthFlask.zs"
+#include "zscript/WanderingMonsterItem.zs"
+#include "zscript/BossProjectiles.zs"
+#include "zscript/UtilityClasses.zs"
+#include "zscript/RaiseDead.zs"
+#include "zscript/EventHandlers.zs"
