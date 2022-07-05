@@ -7,6 +7,7 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
     Default
     {
         fonStaff.ChargeValue 0;
+        Weapon.SelectionOrder 1;
     }
 
     States

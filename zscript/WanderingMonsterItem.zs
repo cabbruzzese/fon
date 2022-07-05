@@ -136,36 +136,39 @@ class WanderingMonsterItem : Powerup
         if (BossFlag & WMF_LEADER)
         {
             if (LeaderType & WML_ICE)
-                Owner.A_DropItem("HNecroWeaponIceRingAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+                Owner.A_DropItem("HNecroWeaponIceRingAmmoBig", 12, DROP_AMMO_CHANCE_BIG);
             else if (LeaderType & WML_FIRE)
-                Owner.A_DropItem("HNecroWeaponGrenadeAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+            {
+                if (random(0,255) < DROP_AMMO_CHANCE_BIG)
+                    Owner.A_SpawnItemEx("fonGrenadeAmmoBig", 10, angle: Owner.angle += 120);
+            }
             else if (LeaderType & WML_LIGHTNING)
-                Owner.A_DropItem("HNecroWeaponTornadoAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+                Owner.A_DropItem("HNecroWeaponTornadoAmmoBig", 12, DROP_AMMO_CHANCE_BIG);
             else if (LeaderType & WML_BLOOD)
-                Owner.A_DropItem("HNecroWeaponStaffAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+                Owner.A_DropItem("HNecroWeaponStaffAmmoBig", 30, DROP_AMMO_CHANCE_BIG);
             else if (LeaderType & WML_DEATH)
-                Owner.A_DropItem("HNecroWeaponScytheAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+                Owner.A_DropItem("HNecroWeaponScytheAmmoBig", 6, DROP_AMMO_CHANCE_BIG);
             else
-                Owner.A_DropItem("HNecroWeaponPistolAmmoBig", 20, DROP_AMMO_CHANCE_BIG);
+                Owner.A_DropItem("HNecroWeaponPistolAmmoBig", 3, DROP_AMMO_CHANCE_BIG);
         }
         else if (BossFlag & WMF_BRUTE)
         {
-            Owner.A_DropItem("HNecroHealthFlask", 20, DROP_AMMO_CHANCE);
+            Owner.A_DropItem("HNecroHealthFlask", 0, DROP_AMMO_CHANCE);
         }
         else if (BossFlag & WMF_SPECTRE)
         {
-            Owner.A_DropItem("HNecroWeaponSwordAmmo", 20, DROP_AMMO_CHANCE);
+            Owner.A_DropItem("HNecroWeaponSwordAmmo", 4, DROP_AMMO_CHANCE);
         }
 
         int randomDrop = random[WMFDrop](0, 100);
         if (randomDrop < 50)
         {
             if (randomDrop > 25)
-                Owner.A_DropItem("HNecroHealthFlask", 10, DROP_AMMO_CHANCE);
+                Owner.A_DropItem("HNecroHealthFlask", 0, DROP_AMMO_CHANCE);
             else if (randomDrop > 15)
-                Owner.A_DropItem("HNecroWeaponSwordAmmo", 15, DROP_AMMO_CHANCE);
+                Owner.A_DropItem("HNecroWeaponSwordAmmo", 4, DROP_AMMO_CHANCE);
             else
-                Owner.A_DropItem("HNecroWeaponStaffAmmo", 15, DROP_AMMO_CHANCE);
+                Owner.A_DropItem("HNecroWeaponStaffAmmo", 10, DROP_AMMO_CHANCE);
         }
     }
 

@@ -15,6 +15,7 @@ class fonAxe : fonMeleeWeapon replaces HON_Axe1
 		Inventory.PickupMessage "$PKUP_BAxe";
 		XScale 1.0; //0.84;
 		YScale 1.0; //0.7;
+		Weapon.SelectionOrder 2;
 	}
 
 	States

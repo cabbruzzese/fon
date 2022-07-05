@@ -18,6 +18,7 @@ class fonSword : fonMeleeWeapon replaces HNecroWeaponSword
 		+WEAPON.NOALERT
 		XScale 0.84;
 		YScale 0.7;
+		Weapon.SelectionOrder 3;
 	}
 
 	States

@@ -35,8 +35,6 @@ class fonMeleeWeapon : HNecroWeaponSword
 		{
 			for(int j = 1; j >= -1; j -= 2)
 			{
-                //string msg = String.Format("Range: %d", meleeRange);
-                //A_PrintBold(msg);
 				double ang = angle + j * i * (45. / 16);
 				let slope = AimLineAttack(ang, meleeRange, t);
 				if(t.linetarget)

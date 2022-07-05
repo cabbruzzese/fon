@@ -1,11 +1,11 @@
-const ACTORLISTMAX = 128;
+const LIST_ITEM_MAX = 256;
 class ActorList
 {
-	Actor actors[ACTORLISTMAX];
+	Actor actors[LIST_ITEM_MAX];
 	int arrayLen;
     int arrayLenMax;
 
-    void Init(int maxLen)
+    void Init(int maxLen = LIST_ITEM_MAX)
     {
         Clear();
         arrayLenMax = maxLen;
@@ -72,7 +72,115 @@ class ActorList
         return mo;
 	}
 
-	int GetSize()
+	int Size()
+	{
+		return arrayLen;
+	}
+
+    int GetMaxSize()
+	{
+		return arrayLenMax;
+	}
+}
+
+class PosBag
+{
+	int X;
+	int Y;
+	int Z;
+
+	void SetPos(Vector3 vec)
+	{
+		X = vec.X;
+		Y = vec.Y;
+		Z = vec.Z;
+	}
+	void SetPosXYZ(double newX, double newY, double newZ)
+	{
+		X = newX;
+		Y = newY;
+		Z = newZ;
+	}
+
+	Vector3 GetPos()
+	{
+		return (X,Y,Z);
+	}
+}
+class Vector3List
+{
+	PosBag vectors[LIST_ITEM_MAX];
+	int arrayLen;
+    int arrayLenMax;
+
+    void Init(int maxLen = LIST_ITEM_MAX)
+    {
+        Clear();
+        arrayLenMax = maxLen;
+    }
+
+	void Clear ()
+	{
+		for (int i = 0; i < arrayLenMax; i++)
+		{
+			let mo = vectors[i];
+			if (mo)
+			{
+				vectors[i] = null;
+			}
+		}
+		arrayLen = 0;
+	}
+
+	void Shift()
+	{
+		if (arrayLen < 1)
+			return;
+		
+		for (int i = 0; i < arrayLen; i++)
+		{
+			vectors[i - 1] = vectors[i];
+		}
+		
+		arrayLen--;
+		vectors[arrayLen] = null;
+	}
+
+	void Push(Vector3 newItem)
+	{
+		if (arrayLen >= arrayLenMax)
+		{
+			Shift();
+		}
+
+		PosBag newPos = new("PosBag");
+		newPos.SetPos(newItem);
+		vectors[arrayLen] = newPos;
+		arrayLen++;
+	}
+
+	Vector3 Pop()
+	{
+		if (arrayLen == 0)
+			return (0,0,0);
+
+		arrayLen--;
+		let mo = vectors[arrayLen].GetPos();
+		vectors[arrayLen] = null;
+
+		return mo;
+	}
+
+	Vector3 GetItem(int itemIndex)
+	{
+        if (itemIndex < 0 || itemIndex > arrayLen)
+            return (0,0,0);
+        
+	    let mo = vectors[itemIndex].GetPos();
+        return mo;
+	}
+
+	int Size()
 	{
 		return arrayLen;
 	}
