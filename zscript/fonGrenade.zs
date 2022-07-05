@@ -62,8 +62,6 @@ class fonGrenade : HNecroWeaponGrenade replaces HNecroWeaponGrenade
 		let gren = fonThrownGrenade(A_FireProjectile("fonThrownGrenade"));
 		if(gren)
 		{
-			string s = String.Format("Grenade Timer is: %d", invoker.grenadeTimer);
-			A_PrintBold(s);
 			gren.GrenadeTimer = invoker.grenadeTimer;
 			gren.Vel.Z += 8.0;
 		}
@@ -83,7 +81,7 @@ class fonThrownGrenade : HNecroWeaponThrownGrenade replaces HNecroWeaponThrownGr
 		{
 			if(!Level.isFrozen())
 				GrenadeTimer++;
-			if(GrenadeTimer >= 100 && GrenadeTimer < 999)
+			if(GrenadeTimer >= 100)
 			{
 				GrenadeTimer = 1000;
 				if (!InStateSequence(curState, ResolveState("Bounce.Actor.Creature")))
