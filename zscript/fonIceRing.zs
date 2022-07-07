@@ -41,10 +41,12 @@ class fonIceRing : HNecroWeaponIceRing replaces HNecroWeaponIceRing
 	{
         if (isFirst)
         {
-            Weapon w = player.ReadyWeapon;
-            if (!w.DepleteAmmo(false, true, 1))
-                return;
+			Weapon w = player.ReadyWeapon;
+			if (!w.CheckAmmo(PrimaryFire, true, true, 1))
+            	return;
 
+        	w.DepleteAmmo(false, true, 1);
+            
             A_StartSound("icegolem/blizzard");
     		HoNWeaponQuake(3, 4);
         }
