@@ -54,7 +54,7 @@ class FireLeaderLava : TimedActor
 					return 0;
 				
 				//friendly leaders can't hurt monsters
-				let fonPlayer = fonPlayer(victim);
+				let fonPlayer = fonPlayer.GetPlayerOrMorph(victim);
             	if (fonPlayer)
 					return 0;
 			}

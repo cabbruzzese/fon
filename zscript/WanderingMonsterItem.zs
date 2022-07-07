@@ -58,6 +58,8 @@ class WanderingMonsterItem : Powerup
     property IsSpectreable : isSpectreable;
     property ThinkTimout : thinkTimout;
 
+    Actor lastDamageSource;
+
 	Default
 	{
 		+INVENTORY.UNDROPPABLE
@@ -157,7 +159,7 @@ class WanderingMonsterItem : Powerup
         }
         else if (BossFlag & WMF_SPECTRE)
         {
-            Owner.A_DropItem("HNecroWeaponSwordAmmo", 4, DROP_AMMO_CHANCE);
+            Owner.A_DropItem("HNecroWeaponSwordAmmo", 5, DROP_AMMO_CHANCE);
         }
 
         int randomDrop = random[WMFDrop](0, 100);
@@ -166,15 +168,22 @@ class WanderingMonsterItem : Powerup
             if (randomDrop > 25)
                 Owner.A_DropItem("HNecroHealthFlask", 0, DROP_AMMO_CHANCE);
             else if (randomDrop > 15)
-                Owner.A_DropItem("HNecroWeaponSwordAmmo", 4, DROP_AMMO_CHANCE);
+                Owner.A_DropItem("HNecroWeaponSwordAmmo", 5, DROP_AMMO_CHANCE);
             else
                 Owner.A_DropItem("HNecroWeaponStaffAmmo", 10, DROP_AMMO_CHANCE);
+        }
+
+        if (lastDamageSource)
+        {
+            let fonPlayer = fonPlayer.GetPlayerOrMorph(lastDamageSource);
+            if (fonPlayer)
+                fonPlayer.DoMonsterKill(Owner);
         }
     }
 
     int GetPlayerLevel(int playerNum)
     {
-        let fonPlayer = fonPlayer(players[playerNum].mo);		
+        let fonPlayer = fonPlayer.GetPlayerOrMorph(players[playerNum].mo);		
 		if (!fonPlayer)
 			return 1;
 
@@ -505,7 +514,7 @@ class WanderingMonsterItem : Powerup
             if (damageTarget.bDONTTHRUST)
                 return;
             
-            let fonPlayer = fonPlayer(damageTarget);
+            let fonPlayer = fonPlayer.GetPlayerOrMorph(damageTarget);
             if (damageTarget.bIsMonster || fonPlayer)
             {
                 damageTarget.Thrust(12, Owner.angle);
@@ -537,6 +546,10 @@ class WanderingMonsterItem : Powerup
             {
                 DoLeaderTakeDamage(damage, damageType, inflictor, source, newdamage);
             }
+
+            //Mark inflictor source
+            if (source)
+                lastDamageSource = source;
         }
 
         //Extra damage effects
@@ -550,6 +563,22 @@ class WanderingMonsterItem : Powerup
             }
         }
 	}
+
+    //Grant player effects
+    override void Die(Actor source, Actor inflictor, int dmgflags, Name meansOfDeath)
+    {
+        A_PrintBold("Kill");
+        if (source && self && bIsMonster && !bBoss)
+        {
+            A_PrintBold("Monster Kill");
+            let fonPlayer = fonPlayer.GetPlayerOrMorph(source);
+            if (fonPlayer)
+            {
+                A_PrintBold("Player Exists");
+                fonPlayer.DoMonsterKill(self);
+            }
+        }
+    }
 
     void DoThink()
     {

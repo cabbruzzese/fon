@@ -2,13 +2,16 @@ const MAXXPHIT = 125;
 const XPMULTI = 1000;
 const STATNUM = 5;
 const START_HEALTH = 75;
-const REGENERATE_TICKS_MAX_DEFAULT = 128;
+const REGENERATE_TICKS_MAX_DEFAULT = 80;
 const REGENERATE_MIN_VALUE = 15;
 
 const STAFF_LEVEL_SPREAD = 10;
 const ICE_LEVEL_BREATH = 16;
 const STAFF_LEVEL_CHARGE = 22;
 const TORNADO_LEVEL_LIGHTNING = 28;
+
+const FEROCITY_LEVEL_ENERGY = 12;
+const FEROCITY_LEVEL_REGEN = 16;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -23,6 +26,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	property InitMagic : initMagic;
 	property RegenerateTicks : regenerateTicks;
 	property RegenerateTicksMax : regenerateTicksMax;
+
+	PlayerLevelItem levelItem;
+	property LevelItem : levelItem;
 
 	Default
 	{
@@ -39,7 +45,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		Player.StartItem "fonStaff", 1;
 		Player.StartItem "fonSword", 1;
 		Player.StartItem "HNecroWeaponStaffAmmo", 50;
-		Player.StartItem "HNecroWeaponMorphAmmo", 100;
+		Player.StartItem "HNecroWeaponMorphAmmo", 50;
 	}
 
 	double GetScaledMod(int stat)
@@ -98,7 +104,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	const AMMO_MAX_PISTOL = 30;
 	const AMMO_MAX_GRENADE = 30;
 	const AMMO_MAX_SCYTHE = 50;
-	const AMMO_MAX_MORPH = 50;
+	const AMMO_MAX_MORPH = 100;
 
 	int GetNewAmmoMax(int baseMax, int stat)
 	{
@@ -108,10 +114,12 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 	Ammo GetAmmoType (Class<Inventory> ammoName)
 	{
-		let ammoItem = Ammo(FindInventory(ammoName));
+		let playerObj = GetPlayerOrMorph(self);
+
+		let ammoItem = Ammo(playerObj.FindInventory(ammoName));
 		if (ammoItem == null)
 		{
-			ammoItem = Ammo(GiveInventoryType(ammoName));
+			ammoItem = Ammo(playerObj.GiveInventoryType(ammoName));
 			ammoItem.Amount = 0;
 		}
 
@@ -160,21 +168,19 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 			int healthHealed = Min(maxHealthNew, Health + healthDifference);
 			A_SetHealth(healthHealed);
 		}
+
+		let altPawn = PlayerPawn(Alternative);
+		if (altPawn)
+		{
+			altPawn.MaxHealth = MaxHealth;
+			altPawn.A_SetHealth(Health);
+		}
 	}
 
 	void UpdateLevelStats(PlayerLevelItem statItem)
 	{
 		SetAmmoMax(statItem);
 		SetHealthMax(statItem);
-		//Ammo max 
-		//Gain 1 AC (5%) per 10 Dex
-		//int armorMod = statItem.Dexterity / 2;
-		//armorMod = Max(armorMod, 0);
-		//armorMod = Min(armorMod, MAX_LEVEL_ARMOR);
-		
-		//let hArmor = HexenArmor(FindInventory("HexenArmor"));
-		//if (hArmor)
-			//hArmor.Slots[4] = armorMod;
 	}
 
 	int CalcXPNeeded(PlayerLevelItem statItem)
@@ -213,6 +219,10 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	{
 		if (Health < MaxHealth)
 		 	A_SetHealth(MaxHealth);
+
+		let altPawn = PlayerPawn(Alternative);
+		if (altPawn && altPawn.Health < MaxHealth)
+			altPawn.A_SetHealth(MaxHealth);
 	}
 
 	//Gain a level
@@ -247,7 +257,10 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		if (StatType == STAT_TYPE_STR)
 			statItem.Strength += 1;
 		else if (StatType == STAT_TYPE_DEX)
+		{
 			statItem.Dexterity += 1;
+			GiveDexSkill(statItem.Dexterity);
+		}
 		else if (StatType == STAT_TYPE_MAG)
 		{
 			statItem.Magic += 1;
@@ -276,6 +289,19 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		}
 	}
 
+	void GiveDexSkill(int dexVal)
+	{
+		switch (dexVal)
+		{
+			case FEROCITY_LEVEL_ENERGY:
+				A_Print("$TXT_SKILLENERGY");
+				break;
+			case FEROCITY_LEVEL_REGEN:
+				A_Print("$TXT_SKILLREGEN");
+				break;
+		}
+	}
+
     void DoXPHit(Actor xpSource, int damage, name damagetype)
 	{
         if (damage <= 0)
@@ -293,6 +319,25 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
         GiveXP(statItem, xp);
 	}
 
+	const ENERGY_GAIN_MAX = 20;
+	void DoMonsterKill(Actor victim)
+	{
+		let statItem = GetStats();
+		if (Health > 0 && victim && statItem.Dexterity >= FEROCITY_LEVEL_ENERGY)
+		{
+			int energyGain = Min(statItem.Dexterity / 3, ENERGY_GAIN_MAX);
+			A_GiveInventory("HNecroWeaponMorphAmmo", energyGain);
+
+			A_PrintBold(String.Format("Energy Drain: %d", energyGain));
+
+			let altPawn = PlayerPawn(Alternative);
+			if (altPawn)
+			{
+				altPawn.A_GiveInventory("HNecroWeaponMorphAmmo", energyGain);
+			}
+		}
+	}
+
 	override void PostBeginPlay()
 	{
 		Super.PostBeginPlay();
@@ -302,9 +347,11 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 		MaxHealth = statItem.MaxHealth;
 
-		let expItem = Inventory(FindInventory("ExpSquishItemGiver"));
+		let playerObj = GetPlayerOrMorph(self);
+
+		let expItem = Inventory(playerObj.FindInventory("ExpSquishItemGiver"));
 		if (expItem == null)
-			expItem = GiveInventoryType("ExpSquishItemGiver");
+			expItem = playerObj.GiveInventoryType("ExpSquishItemGiver");
 
 		//Set minimum spawn level in multiplayer
 		if (multiplayer || DEBUG_MODE)
@@ -326,24 +373,25 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 	PlayerLevelItem GetStats()
 	{
-		let lvlItem = PlayerLevelItem(FindInventory("PlayerLevelItem"));
-		if (lvlItem == null)
+		let playerObj = GetPlayerOrMorph(self);
+
+		if (levelItem == null)
 		{
-			lvlItem = PlayerLevelItem(GiveInventoryType("PlayerLevelItem"));
-			lvlItem.Strength = InitStrength;
-			lvlItem.Dexterity = InitDexterity;
-			lvlItem.Magic = InitMagic;
-			lvlItem.MaxHealth = MaxHealth;
+			levelItem = PlayerLevelItem(playerObj.GiveInventoryType("PlayerLevelItem"));
+			levelItem.Strength = InitStrength;
+			levelItem.Dexterity = InitDexterity;
+			levelItem.Magic = InitMagic;
+			levelItem.MaxHealth = MaxHealth;
 		}
 
-		return lvlItem;
+		return levelItem;
 	}
 
 	ui PlayerLevelItem GetUIStats()
 	{
-		let lvlItem = PlayerLevelItem(FindInventory("PlayerLevelItem"));
+		let playerObj = GetPlayerOrMorphUI(self);
 		
-		return lvlItem;
+		return LevelItem;
 	}
 
 	int GetStrength()
@@ -361,11 +409,23 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	void RegenerateHealth(int regenMax)
 	{
 		regenMax = Max(regenMax, REGENERATE_MIN_VALUE);
+		regenMax = Min(regenMax, MaxHealth / 2);
 		if (Health < regenMax)
 			GiveBody(1);
+		
+		let altPawn = PlayerPawn(Alternative);
+		if (altPawn && altPawn.Health < regenMax)
+			altPawn.GiveBody(1);
 	}
 
-	virtual void Regenerate(PlayerLevelItem statItem) { }
+	virtual void Regenerate(PlayerLevelItem statItem)
+	{ 
+		if (statItem.Dexterity >= FEROCITY_LEVEL_REGEN)
+		{
+			int regenMax = statItem.Dexterity + REGENERATE_MIN_VALUE;
+			RegenerateHealth(regenMax);
+		}
+	}
 
 	override void Tick()
 	{
@@ -382,10 +442,19 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		}
 
 		Super.Tick();
-
-		//let statItem = GetStats();
-        //GiveXP(statItem, 3);
 	}
+
+	override void PreMorph(Actor mo, bool current)
+	{
+		let newPawn = PlayerPawn(mo);
+		if (newPawn)
+		{
+			//keep max health
+			let statItem = GetStats();
+			newPawn.MaxHealth = statItem.MaxHealth;
+		}
+	}
+
 
 	override void OnRespawn()
 	{
@@ -395,5 +464,47 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 		MaxHealth = statItem.MaxHealth;
 		A_SetHealth(MaxHealth);
+	}
+
+	static fonPlayer GetPlayerOrMorph(Actor obj)
+	{
+		if (!obj)
+			return null;
+
+		PlayerPawn pawn = PlayerPawn(obj);
+
+		if (!pawn)
+			return null;
+		
+		fonPlayer fonPlayerObj = fonPlayer(pawn);
+		if (fonPlayerObj)
+			return fonPlayerObj;
+
+		if (!pawn.Alternative)
+			return null;
+
+		fonPlayerObj = fonPlayer(pawn.Alternative);
+		return fonPlayerObj;
+	}
+
+	static ui fonPlayer GetPlayerOrMorphUI(Actor obj)
+	{
+		if (!obj)
+			return null;
+
+		PlayerPawn pawn = PlayerPawn(obj);
+
+		if (!pawn)
+			return null;
+		
+		fonPlayer fonPlayerObj = fonPlayer(pawn);
+		if (fonPlayerObj)
+			return fonPlayerObj;
+
+		if (!pawn.Alternative)
+			return null;
+		
+		fonPlayerObj = fonPlayer(pawn.Alternative);
+		return fonPlayerObj;
 	}
 }

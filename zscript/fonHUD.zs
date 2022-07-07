@@ -25,7 +25,7 @@ class fonHUD : HNecroHUD
 
     protected void DrawXPBar()
     {
-        let fonPlayer = fonPlayer(CPlayer.mo);
+        let fonPlayer = fonPlayer.GetPlayerOrMorphUI(CPlayer.mo);
 		if (!fonPlayer)
 			return;
 
@@ -48,7 +48,7 @@ class fonHUD : HNecroHUD
 		
 		let xPosStats = 500;
 
-		let fonPlayer = fonPlayer(CPlayer.mo);
+		let fonPlayer = fonPlayer.GetPlayerOrMorphUI(CPlayer.mo);
 		if (!fonPlayer)
 			return;
 

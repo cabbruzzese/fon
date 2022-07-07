@@ -15,3 +15,8 @@ TXT_SKILLSTAFFCHARGE = "The Fireball Staff is powered with charge attacks.";
 TXT_SKILLSTAFFSPREAD = "The Fireball Staff is powered with scorching spray.";
 TXT_SKILLICEBREATH = "The Ice Ring is powered with Ice Breath.";
 TXT_SKILLTORNADOLIGHTNING = "The Tornado spell is powered with Lightning Strikes.";
+
+TXT_SKILLENERGY = "Your ferocity now lusts for blood energy.";
+TXT_SKILLREGEN = "Your ferocity now sustains you with regeneration.";
+
+TXT_NOTRANSFORMUSE = "This cannot be used while transformed.";

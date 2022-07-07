@@ -68,7 +68,7 @@ class RepopulationHandler : EventHandler
 
     int GetPlayerLevel(int playerNum)
     {
-        let fonPlayer = fonPlayer(players[playerNum].mo);		
+        let fonPlayer = fonPlayer.GetPlayerOrMorph(players[playerNum].mo);		
 		if (!fonPlayer)
 			return 1;
 

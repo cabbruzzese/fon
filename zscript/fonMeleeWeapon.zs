@@ -17,7 +17,7 @@ class fonMeleeWeapon : HNecroWeaponSword
 	{
 		if(!player)
 			return;
-		let fp = fonPlayer(player.mo);
+		let fp = fonPlayer.GetPlayerOrMorph(player.mo);
 		if (!fp)
 			return;
 

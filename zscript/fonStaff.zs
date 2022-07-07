@@ -96,7 +96,7 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
         Weapon w = player.ReadyWeapon;
         if(!player)
 			return;
-		let fp = fonPlayer(player.mo);
+		let fp = fonPlayer.GetPlayerOrMorph(player.mo);
 		if (!fp)
 			return;
 

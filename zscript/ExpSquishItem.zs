@@ -67,7 +67,7 @@ class ExpSquishItem : Powerup
 	{
 		if (!passive && damage > 0 && Owner && Owner.Player && Owner.Player.mo)
         {
-            let fonPlayer = fonPlayer(Owner.Player.mo);
+            let fonPlayer = fonPlayer.GetPlayerOrMorph(Owner.Player.mo);
             if (fonPlayer)
             {
                 fonPlayer.DoXPHit(source, damage, damageType);
