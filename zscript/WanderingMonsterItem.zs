@@ -564,22 +564,6 @@ class WanderingMonsterItem : Powerup
         }
 	}
 
-    //Grant player effects
-    override void Die(Actor source, Actor inflictor, int dmgflags, Name meansOfDeath)
-    {
-        A_PrintBold("Kill");
-        if (source && self && bIsMonster && !bBoss)
-        {
-            A_PrintBold("Monster Kill");
-            let fonPlayer = fonPlayer.GetPlayerOrMorph(source);
-            if (fonPlayer)
-            {
-                A_PrintBold("Player Exists");
-                fonPlayer.DoMonsterKill(self);
-            }
-        }
-    }
-
     void DoThink()
     {
         switch (LeaderType)

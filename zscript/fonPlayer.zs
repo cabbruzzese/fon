@@ -328,8 +328,6 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 			int energyGain = Min(statItem.Dexterity / 3, ENERGY_GAIN_MAX);
 			A_GiveInventory("HNecroWeaponMorphAmmo", energyGain);
 
-			A_PrintBold(String.Format("Energy Drain: %d", energyGain));
-
 			let altPawn = PlayerPawn(Alternative);
 			if (altPawn)
 			{
