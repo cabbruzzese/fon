@@ -285,3 +285,35 @@ class StoppableActor : Actor
 		A_RenewSpeed();
 	}
 }
+
+class TestMover
+{
+	play static bool CanMove(Actor actorObj, Vector3 dest, bool doMove = false)
+	{
+		if (!actorObj)
+			return false;
+
+		bool result = false;
+
+		Vector3 startingPos = (actorObj.Pos.X, actorObj.Pos.Y, actorObj.Pos.Z);
+		
+		actorObj.SetOrigin(dest, false);
+		dest.z = actorObj.CurSector.NextLowestFloorAt(actorObj.pos.x, actorObj.pos.y, actorObj.pos.z, actorObj.pos.z, FFCF_NOPORTALS);
+
+		actorObj.SetZ(dest.z);
+
+		if (!actorObj.TestMobjLocation() || actorObj.height > (actorObj.ceilingz - actorObj.floorz) || !actorObj.CheckMove(actorObj.Pos.XY))
+		{			
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+
+		if (!doMove)
+			actorObj.SetOrigin(startingPos, false);
+
+		return result;
+	}
+}

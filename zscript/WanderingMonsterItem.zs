@@ -314,8 +314,9 @@ class WanderingMonsterItem : Powerup
         }
         else
         {
+            //Human monsters cannot become brutes
             int bruteChance = min(BOSSTYPE_CHANCE_BRUTE + playerLevel, BOSSTYPE_CHANCE_MAX);
-            if (random[WMFBrute](0, 100) < bruteChance)
+            if (random[WMFBrute](0, 100) < bruteChance && !(Owner is "HON_Enemy_Acolyte"))
                 props.BossFlag |= WMF_BRUTE;
 
             int leaderChance = min(BOSSTYPE_CHANCE_LEADER + playerLevel, BOSSTYPE_CHANCE_MAX);
@@ -383,9 +384,13 @@ class WanderingMonsterItem : Powerup
             bool traceFail = Owner.LineTrace(vecAngle, vecLen, newPitch);
 
             Owner.SetOrigin(newPos, false);
-            newPos.z = Owner.CurSector.NextLowestFloorAt(Owner.pos.x, Owner.pos.y, Owner.pos.z, Owner.pos.z, FFCF_NOPORTALS);
 
-            Owner.SetZ(newPos.z);
+            //Reset to floor if not a flying monster
+            if (!Owner.bNOGRAVITY)
+            {
+                newPos.z = Owner.CurSector.NextLowestFloorAt(Owner.pos.x, Owner.pos.y, Owner.pos.z, Owner.pos.z, FFCF_NOPORTALS);
+                Owner.SetZ(newPos.z);
+            }
 
             if (traceFail || !Owner.TestMobjLocation() || Owner.height > (Owner.ceilingz - Owner.floorz) || !Owner.CheckMove(Owner.Pos.XY))
             {

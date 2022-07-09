@@ -100,51 +100,103 @@ class RepopulationHandler : EventHandler
         Array<Class<Actor> > monsterList;
         Class<Actor> classBag;
 
+        if (playerLevel > 20)
+            monsterList.Push(getClassPointer("hon_enemy_wyvern"));
         if (playerLevel > 18)
             monsterList.Push(getClassPointer("HON_Enemy_FireDemon"));
         if (playerLevel > 16)
             monsterList.Push(getClassPointer("HON_Enemy_SoulEater"));
         if (playerLevel > 14)
             monsterList.Push(getClassPointer("HON_Enemy_UndeadKnight"));
-        if (playerLevel > 10)
+        if (playerLevel > 12)
             monsterList.Push(getClassPointer("HON_Enemy_TormentedUndead"));
-        if (playerLevel > 9)
-            monsterList.Push(getClassPointer("HON_Enemy_IceGolem"));
-        if (playerLevel > 8)
-            monsterList.Push(getClassPointer("HON_Enemy_StoneGolem"));
-        if (playerLevel > 7)
+        if (playerLevel > 10)
             monsterList.Push(getClassPointer("HON_Enemy_Bishop"));
+        if (playerLevel > 8)
+            monsterList.Push(getClassPointer("HON_Enemy_IceGolem"));
+        if (playerLevel > 7)
+            monsterList.Push(getClassPointer("HON_Enemy_StoneGolem"));
         if (playerLevel > 6)
             monsterList.Push(getClassPointer("HON_Enemy_Priest"));
         if (playerLevel > 5)
             monsterList.Push(getClassPointer("HON_Enemy_Gargoyle"));
         if (playerLevel > 4)
             monsterList.Push(getClassPointer("HON_Enemy_Lemure"));
-        if (playerLevel > 3)
+        if (playerLevel > 3 && playerLevel < 9)
             monsterList.Push(getClassPointer("HON_Enemy_UndeadMinion"));
-        if (playerLevel > 2)
+        if (playerLevel > 2 && playerLevel < 8)
             monsterList.Push(getClassPointer("HON_Enemy_SwampSerpent"));
         
-        monsterList.Push(getClassPointer("HON_Enemy_Acolyte"));
+        if (playerLevel < 10)
+            monsterList.Push(getClassPointer("HON_Enemy_Acolyte"));
 
         int monsterPick = random(0, monsterList.Size() - 1);
         return monsterList[monsterPick];
     }
 
-    Vector3 GetDestination()
+    Class<Actor> GetWonderingMonsterAquatic()
     {
-        int destinationPick = random(0, getPosList().Size() - 1);
-        return getPosList().GetItem(destinationPick);
+        if (random(1,3) == 1)
+        {
+            return getClassPointer("HON_Enemy_SwampSerpent");
+        }
+
+        return getClassPointer("HON_Enemy_SeaNightmare");
     }
 
+    Vector3 GetDestination()
+    {
+        let listObj = getPosList();
+
+        int destinationPick = random(0, listObj.Size() - 1);
+        return listObj.GetItem(destinationPick);
+    }
+
+    int GetDestinationListSize()
+    {
+        return getPosList().Size();
+    }
+
+    Actor SpawnMonsterForRepop(Class<Actor> actorClass)
+    {
+        let spawnClass = actorClass;
+
+        let mo = players[0].mo.Spawn(spawnClass);
+
+        return mo;
+    }
+
+    const REPOP_RETRY_MAX = 5;
     void DoRepopulate()
     {
+        //Don't try to repopulate if list of destinations is empty
+        if (GetDestinationListSize() < 1)
+            return;
+
+        int retries = 0;
+        bool success = false;
+
         int playerLevel = GetMaxPlayerLevel();
         let actorClass = GetWonderingMonster(playerLevel);
 
-        let dest = GetDestination();
+        let mo = SpawnMonsterForRepop(actorClass);
 
-        players[0].mo.Spawn(actorClass, dest);
+        while (retries < REPOP_RETRY_MAX && !success)
+        {
+            retries++;
+            let dest = GetDestination();
+
+            
+            if (TestMover.CanMove(mo, dest, true))
+            {
+                success = true;
+            }
+        }
+
+        if (!success)
+        {
+            mo.Destroy();
+        }
     }
 
     override void WorldTick ()

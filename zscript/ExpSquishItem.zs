@@ -29,6 +29,13 @@ class PlayerLevelItem : Inventory
 
 	override void OwnerDied() 
 	{
+		if (Owner)
+		{
+			let crystalItem = Inventory(Owner.FindInventory("HNecroCrystal"));
+			if (crystalItem && crystalItem.Amount > 0)
+				return;
+		}
+		
 		//reduce all gained XP for this level
 		Exp = 0;
 
