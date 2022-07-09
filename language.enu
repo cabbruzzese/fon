@@ -11,10 +11,11 @@ TAG_STRPICKUP = "Increase Vengeance";
 TAG_DEXPICKUP = "Increase Ferocity";
 TAG_MAGPICKUP = "Increase Scorn";
 
-TXT_SKILLSTAFFCHARGE = "The Fireball Staff is powered with charge attacks.";
-TXT_SKILLSTAFFSPREAD = "The Fireball Staff is powered with scorching spray.";
+TXT_SKILLSTAFFCHARGE = "The Fireball Staff is powered with Charge Attacks.";
+TXT_SKILLSTAFFSPREAD = "The Fireball Staff is powered with Scorching Spray.";
 TXT_SKILLICEBREATH = "The Ice Ring is powered with Ice Breath.";
 TXT_SKILLTORNADOLIGHTNING = "The Tornado spell is powered with Lightning Strikes.";
+TXT_SKILLSCYTHERAISE = "The Scythe is powered with Raising the Dead.";
 
 TXT_SKILLENERGY = "Your ferocity now lusts for blood energy.";
 TXT_SKILLREGEN = "Your ferocity now sustains you with regeneration.";

@@ -12,6 +12,7 @@ const DEBUG_MODE = 0;
 #include "zscript/fonIceRing.zs"
 #include "zscript/fonTornado.zs"
 #include "zscript/fonGrenade.zs"
+#include "zscript/fonScythe.zs"
 #include "zscript/fonMeleeWeapon.zs"
 #include "zscript/fonHealthFlask.zs"
 #include "zscript/WanderingMonsterItem.zs"

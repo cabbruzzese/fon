@@ -1,3 +1,26 @@
+//-----------------------------------------------------------------------------
+// Code modified by from HON for Feat of Necromancy Mod. Original license below
+//                      - peewee
+//-----------------------------------------------------------------------------
+//
+// Copyright 2019-2022 HON Team, Frechou Games
+// Copyright 1993-2022 GZDoom Team, id Software, and contributors
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
+
 const MAXXPHIT = 125;
 const XPMULTI = 1000;
 const STATNUM = 5;
@@ -9,6 +32,7 @@ const STAFF_LEVEL_SPREAD = 10;
 const ICE_LEVEL_BREATH = 16;
 const STAFF_LEVEL_CHARGE = 22;
 const TORNADO_LEVEL_LIGHTNING = 28;
+const SCYTHE_LEVEL_RAISE = 44;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
@@ -285,6 +309,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				break;
 			case TORNADO_LEVEL_LIGHTNING:
 				A_Print("$TXT_SKILLTORNADOLIGHTNING");
+				break;
+			case SCYTHE_LEVEL_RAISE:
+				A_Print("$TXT_SKILLSCYTHERAISE");
 				break;
 		}
 	}

@@ -11,7 +11,7 @@ class RaiseDeadItem : Inventory
 		+INVENTORY.PERSISTENTPOWER
 		+INVENTORY.UNCLEARABLE
 
-		RaiseDeadItem.SummonType "MonsterSummonGhost";
+		RaiseDeadItem.SummonType "fonSummonGhost";
 	}
 
     override bool Use(bool pickup)
@@ -48,7 +48,7 @@ class MonsterSummonGhost : HON_Enemy_Lemure
 	}
 }
 
-const GHOST_LIFE_MAX = 1024;
+const GHOST_LIFE_MAX = 2048;
 class fonSummonGhost : MonsterSummonGhost
 {
     int lifeCounter;
@@ -57,7 +57,7 @@ class fonSummonGhost : MonsterSummonGhost
 
 	Default
 	{
-		Health 25;
+		Health 50;
 
         +NOICEDEATH
         +FRIENDLY
