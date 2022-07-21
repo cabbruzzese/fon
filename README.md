@@ -23,7 +23,7 @@ Your lust for revenge against the undead kings. This grants you higher maximum h
 Your primal power that fuels transformations. This increases your morph ammo and grants abilities when raised to certain milestones.
 
 ### Scorn
-![Scorn](./imgsrc/expicons/XPDEA0.png)
+![Scorn](./imgsrc/expicons/XPMAA0.png)
 
 Your bitterness and anger towards those who have crossed you. This increases your maximum ammo for magical weapons. You will learn new spell attacks when raised to certain milestones.
 
