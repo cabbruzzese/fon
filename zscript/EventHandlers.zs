@@ -100,15 +100,15 @@ class RepopulationHandler : EventHandler
         Array<Class<Actor> > monsterList;
         Class<Actor> classBag;
 
-        if (playerLevel > 20)
+        if (playerLevel > 22)
             monsterList.Push(getClassPointer("hon_enemy_wyvern"));
-        if (playerLevel > 18)
+        if (playerLevel > 20)
             monsterList.Push(getClassPointer("HON_Enemy_FireDemon"));
-        if (playerLevel > 16)
+        if (playerLevel > 17)
             monsterList.Push(getClassPointer("HON_Enemy_SoulEater"));
-        if (playerLevel > 14)
+        if (playerLevel > 15)
             monsterList.Push(getClassPointer("HON_Enemy_UndeadKnight"));
-        if (playerLevel > 12)
+        if (playerLevel > 13)
             monsterList.Push(getClassPointer("HON_Enemy_TormentedUndead"));
         if (playerLevel > 10)
             monsterList.Push(getClassPointer("HON_Enemy_Bishop"));
