@@ -20,3 +20,4 @@ const DEBUG_MODE = 0;
 #include "zscript/UtilityClasses.zs"
 #include "zscript/RaiseDead.zs"
 #include "zscript/EventHandlers.zs"
+#include "zscript/fonMorph.zs"

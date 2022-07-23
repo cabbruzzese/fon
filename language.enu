@@ -19,5 +19,6 @@ TXT_SKILLSCYTHERAISE = "The Scythe is powered with Raising the Dead.";
 
 TXT_SKILLENERGY = "Your ferocity now lusts for blood energy.";
 TXT_SKILLREGEN = "Your ferocity now sustains you with regeneration.";
+TXT_SKILLINSTAMORPH = "Your ferocity allows you to instantly change forms.";
 
 TXT_NOTRANSFORMUSE = "This cannot be used while transformed.";

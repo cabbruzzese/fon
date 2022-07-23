@@ -36,6 +36,7 @@ const SCYTHE_LEVEL_RAISE = 44;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
+const FEROCITY_LEVEL_INSTAMORPH = 30;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -178,9 +179,13 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 	const HEALTH_MAX_BASE = 50;
 	const HEALTH_MAX_STEP = 5;
+	const HEALTH_MAX_STEP_ALT = 3;
 	void SetHealthMax (PlayerLevelItem statItem)
 	{
-		int maxHealthStep = HEALTH_MAX_STEP * statItem.Strength;
+		int maxHealthStepStr = HEALTH_MAX_STEP * statItem.Strength;
+		int maxHealthStepDex = HEALTH_MAX_STEP_ALT * statItem.Dexterity;
+		int maxHealthStep = max(maxHealthStepStr, maxHealthStepDex);
+
 		int maxHealthNew = HEALTH_MAX_BASE + maxHealthStep;
 		int healthDifference = maxHealthNew - MaxHealth;
 
@@ -325,6 +330,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				break;
 			case FEROCITY_LEVEL_REGEN:
 				A_Print("$TXT_SKILLREGEN");
+				break;
+			case FEROCITY_LEVEL_INSTAMORPH:
+				A_Print("$TXT_SKILLINSTAMORPH");
 				break;
 		}
 	}
