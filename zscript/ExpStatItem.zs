@@ -19,21 +19,16 @@ class ExpStatItem : PowerupGiver
 	{
 		if (Owner == null) return true;
 		
-		let fonPlayer = fonPlayer(Owner);//Can only be used when in necromancer form
+		let fonPlayer = fonPlayer.GetPlayerOrMorph(Owner);
 		if (fonPlayer)
         {
             fonPlayer.XPStatIncrease(StatType);
             
             //Decrease all stat items
-            fonPlayer.A_TakeInventory("ExpStrItem", 1);
-            fonPlayer.A_TakeInventory("ExpDexItem", 1);
-            fonPlayer.A_TakeInventory("ExpMagItem", 1);
+            Owner.A_TakeInventory("ExpStrItem", 1);
+            Owner.A_TakeInventory("ExpDexItem", 1);
+            Owner.A_TakeInventory("ExpMagItem", 1);
         }
-		else
-		{
-			let pawn = PlayerPawn(Owner);
-			pawn.A_Print("$TXT_NOTRANSFORMUSE");
-		}
 
 		return false;
 	}

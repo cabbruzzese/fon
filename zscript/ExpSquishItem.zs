@@ -77,7 +77,7 @@ class ExpSquishItem : Powerup
             let fonPlayer = fonPlayer.GetPlayerOrMorph(Owner.Player.mo);
             if (fonPlayer)
             {
-                fonPlayer.DoXPHit(source, damage, damageType);
+                fonPlayer.DoXPHit(source, damage, damageType, Owner.Player.mo);
             }
         }
 	}

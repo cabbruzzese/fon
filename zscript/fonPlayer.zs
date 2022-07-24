@@ -217,13 +217,13 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		return statItem.ExpLevel * XPMULTI;
 	}
 	
-	void GiveXP (PlayerLevelItem statItem, int expEarned)
+	void GiveXP (PlayerLevelItem statItem, int expEarned, PlayerPawn currentPlayerObj)
 	{
 		statItem.Exp += expEarned;
 		
 		while (statItem.Exp >= statItem.ExpNext)
 		{
-			GainLevel(statItem);
+			GainLevel(statItem, false, currentPlayerObj);
 		}
 	}
 	
@@ -231,17 +231,22 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	{		
 	}
 	
-	void DoBlend(Color color, float alpha, int tics)
+	void DoBlend(PlayerPawn currentPlayerObj, Color color, float alpha, int tics)
 	{
-		A_SetBlend(color, alpha, tics);
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
+		
+		currentPlayerObj.A_SetBlend(color, alpha, tics);
 	}
 
-	void DoLevelGainBlend(PlayerLevelItem statItem)
+	void DoLevelGainBlend(PlayerLevelItem statItem, PlayerPawn currentPlayerObj)
 	{
-		DoBlend("77 77 77", 0.8, 40);
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
 		
-		string lvlMsg = String.Format("You are now level %d", statItem.ExpLevel);
-		A_Print(lvlMsg);
+		DoBlend(currentPlayerObj, "77 77 77", 0.8, 40);
+		
+		currentPlayerObj.A_Print(String.Format("You are now level %d", statItem.ExpLevel));
 	}
 	
 	void GainLevelHealth(PlayerLevelItem statItem)
@@ -255,21 +260,24 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 	}
 
 	//Gain a level
-	void GainLevel(PlayerLevelItem statItem, bool isNoBlend = false)
+	void GainLevel(PlayerLevelItem statItem, bool isNoBlend = false, PlayerPawn currentPlayerObj = null)
 	{
 		if (statItem.Exp < statItem.ExpNext)
 			return;
+
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
 
 		statItem.ExpLevel++;
 		statItem.Exp = statItem.Exp - statItem.ExpNext;
 		statItem.ExpNext = CalcXpNeeded(statItem);
 		
-		A_GiveInventory("ExpStrItem", STATNUM);
-		A_GiveInventory("ExpDexItem", STATNUM);
-		A_GiveInventory("ExpMagItem", STATNUM);
+		currentPlayerObj.A_GiveInventory("ExpStrItem", STATNUM);
+		currentPlayerObj.A_GiveInventory("ExpDexItem", STATNUM);
+		currentPlayerObj.A_GiveInventory("ExpMagItem", STATNUM);
 
 		if (!isNoBlend)
-			DoLevelGainBlend(statItem);
+			DoLevelGainBlend(statItem, currentPlayerObj);
 		
 		//BasicStatIncrease to call overrides in classes
 		BasicStatIncrease(statItem);
@@ -337,7 +345,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		}
 	}
 
-    void DoXPHit(Actor xpSource, int damage, name damagetype)
+    void DoXPHit(Actor xpSource, int damage, name damagetype, PlayerPawn currentPlayerObj)
 	{
         if (damage <= 0)
             return;
@@ -351,7 +359,8 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
         int xp = Min(damage, MAXXPHIT);
 
 		let statItem = GetStats();
-        GiveXP(statItem, xp);
+
+        GiveXP(statItem, xp, currentPlayerObj);
 	}
 
 	const ENERGY_GAIN_MAX = 20;
@@ -396,7 +405,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				while (statItem.ExpLevel < minLevelSetting.GetInt())
 				{
 					statItem.Exp = statItem.ExpNext;
-					GainLevel(statItem, true);
+					GainLevel(statItem, true, self);
 
 					statItem.Exp = 0;
 				}
@@ -487,7 +496,6 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 			newPawn.MaxHealth = statItem.MaxHealth;
 		}
 	}
-
 
 	override void OnRespawn()
 	{
