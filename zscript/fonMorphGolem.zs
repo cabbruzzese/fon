@@ -71,14 +71,14 @@ class fonWeaponGolem : HNecroPlayerWeaponGolem replaces HNecroPlayerWeaponGolem
 const GOLEM_QUAKE_VELZ_MIN = 4.0;
 const GOLEM_QUAKE_VELZ_MAX = 10.0;
 const GOLEM_QUAKE_VEL_MAX = 1.5;
-const GOLEM_QUAKE_DEBRISNUM = 18;
+const GOLEM_QUAKE_DEBRISNUM = 9;
 class GolemFloorQuake : Actor
 {
 	Default
 	{
 		Radius 5;
 		Height 12;
-		Speed 16;
+		Speed 14;
 		FastSpeed 20;
 		Damage 0;
 		RenderStyle "Add";
@@ -105,6 +105,14 @@ class GolemFloorQuake : Actor
 	{
 		SetZ(floorz);
 
+		//Spawn rock splash on ground
+		let smo = Spawn("HoNBloodDust");
+		if (smo)
+		{
+			int newZ = CurSector.NextLowestFloorAt(pos.x, pos.y, pos.z, pos.z, FFCF_NOPORTALS) + 12;
+			smo.SetOrigin((Pos.X,Pos.Y,newZ), false);
+		}
+
 		for (int i = 0; i < GOLEM_QUAKE_DEBRISNUM; i++)
 		{
 			let xVel = frandom[GolemQuake](-GOLEM_QUAKE_VEL_MAX, GOLEM_QUAKE_VEL_MAX);
@@ -115,6 +123,9 @@ class GolemFloorQuake : Actor
 			if (mo)
 			{
 				mo.SetState (mo.SpawnState + random(0, 5));
+				
+				if (random(1,8) == 1)
+					mo.A_SetScale(3.0);
 			}
 		}
 	}
@@ -146,7 +157,7 @@ class GolemFloorQuake : Actor
     }
 }
 
-class QuakeDebrisMissile : actor
+class QuakeDebrisMissile : TimedActor
 {
 	default
 	{
@@ -160,19 +171,23 @@ class QuakeDebrisMissile : actor
 		-NOGRAVITY
 
 		Gravity 0.5;
+
+		TimedActor.TimeLimit 72;
+		TimedActor.DieOnTimer true;
 	}
 	states
 	{
 	Spawn:
 		STN9 A -1;
-		STN8 B -1;
-		STN8 C -1;
-		STN8 D -1;
-		STN8 E -1;
-		STN8 F -1;
+		STN9 B -1;
+		STN9 C -1;
+		STN9 D -1;
+		STN9 E -1;
+		STN9 F -1;
 		Stop;
 	Death:
-		STN9 A 1;
+		STN9 A 0 A_SetScale(0.3);
+		SWRP ABCDE 2;
 		Stop;
 	}
 }

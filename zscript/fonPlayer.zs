@@ -139,44 +139,51 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		return baseMax * scaleMod;
 	}
 
-	Ammo GetAmmoType (Class<Inventory> ammoName)
+	Ammo GetAmmoType (Class<Inventory> ammoName, PlayerPawn currentPlayerObj)
 	{
-		let playerObj = GetPlayerOrMorph(self);
-
-		let ammoItem = Ammo(playerObj.FindInventory(ammoName));
+		let ammoItem = Ammo(currentPlayerObj.FindInventory(ammoName));
 		if (ammoItem == null)
 		{
-			ammoItem = Ammo(playerObj.GiveInventoryType(ammoName));
+			ammoItem = Ammo(currentPlayerObj.GiveInventoryType(ammoName));
 			ammoItem.Amount = 0;
 		}
 
 		return ammoItem;
 	}
 
-	void SetAmmoTypeMax(Class<Inventory> ammoName, int baseMax, int stat)
+	void SetAmmoTypeMaxPerPlayer(Class<Inventory> ammoName, int baseMax, int stat, PlayerPawn currentPlayerObj)
 	{
-		let ammoItem = GetAmmoType(ammoName);
+		if (!currentPlayerObj)
+			return;
+		
+		let ammoItem = GetAmmoType(ammoName, currentPlayerObj);
 		int newAmmoMax = GetNewAmmoMax(baseMax, stat);
 
 		ammoItem.MaxAmount = newAmmoMax;
 	}
 
-	void SetAmmoMax(PlayerLevelItem statItem)
+	void SetAmmoTypeMax(Class<Inventory> ammoName, int baseMax, int stat, PlayerPawn currentPlayerObj)
+	{
+		if (currentPlayerObj != self)
+		{
+			SetAmmoTypeMaxPerPlayer(ammoName, baseMax, stat, currentPlayerObj);
+		}
+		SetAmmoTypeMaxPerPlayer(ammoName, baseMax, stat, self);
+	}
+
+	void SetAmmoMax(PlayerLevelItem statItem, PlayerPawn currentPlayerObj)
 	{
 		if (!statItem)
 			return;
-		
-		if (!player)
-			return;
 
-		SetAmmoTypeMax("HNecroWeaponSwordAmmo", AMMO_MAX_SWORD, statItem.Magic);
-		SetAmmoTypeMax("HNecroWeaponStaffAmmo", AMMO_MAX_STAFF, statItem.Magic);
-		SetAmmoTypeMax("HNecroWeaponIceRingAmmo", AMMO_MAX_RING, statItem.Magic);
-		SetAmmoTypeMax("HNecroWeaponTornadoAmmo", AMMO_MAX_TORNADO, statItem.Magic);
-		SetAmmoTypeMax("HNecroWeaponPistolAmmo", AMMO_MAX_PISTOL, statItem.Strength);
-		SetAmmoTypeMax("HNecroWeaponGrenadeAmmo", AMMO_MAX_GRENADE, statItem.Strength);
-		SetAmmoTypeMax("HNecroWeaponScytheAmmo", AMMO_MAX_SCYTHE, statItem.Magic);
-		SetAmmoTypeMax("HNecroWeaponMorphAmmo", AMMO_MAX_MORPH, statItem.Dexterity);
+		SetAmmoTypeMax("HNecroWeaponSwordAmmo", AMMO_MAX_SWORD, statItem.Magic, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponStaffAmmo", AMMO_MAX_STAFF, statItem.Magic, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponIceRingAmmo", AMMO_MAX_RING, statItem.Magic, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponTornadoAmmo", AMMO_MAX_TORNADO, statItem.Magic, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponPistolAmmo", AMMO_MAX_PISTOL, statItem.Strength, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponGrenadeAmmo", AMMO_MAX_GRENADE, statItem.Strength, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponScytheAmmo", AMMO_MAX_SCYTHE, statItem.Magic, currentPlayerObj);
+		SetAmmoTypeMax("HNecroWeaponMorphAmmo", AMMO_MAX_MORPH, statItem.Dexterity, currentPlayerObj);
 	}
 
 	const HEALTH_MAX_BASE = 50;
@@ -208,9 +215,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		}
 	}
 
-	void UpdateLevelStats(PlayerLevelItem statItem)
+	void UpdateLevelStats(PlayerLevelItem statItem, PlayerPawn currentPlayerObj)
 	{
-		SetAmmoMax(statItem);
+		SetAmmoMax(statItem, currentPlayerObj);
 		SetHealthMax(statItem);
 	}
 
@@ -286,14 +293,11 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		
 		GainLevelHealth(statItem);
 			
-		UpdateLevelStats(statItem);
+		UpdateLevelStats(statItem, currentPlayerObj);
 	}
 
 	void XPStatIncrease(int StatType, PlayerPawn currentPlayerObj)
 	{
-		if (!currentPlayerObj)
-			currentPlayerObj = self;
-		
 		let statItem = GetStats();
 
 		if (StatType == STAT_TYPE_STR)
@@ -309,11 +313,14 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 			GiveMagicSkill(statItem.Magic, currentPlayerObj);
 		}
 
-		UpdateLevelStats(statItem);
+		UpdateLevelStats(statItem, currentPlayerObj);
 	}
 
 	void GiveMagicSkill(int magicVal, PlayerPawn currentPlayerObj)
 	{
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
+		
 		switch (magicVal)
 		{
 			case STAFF_LEVEL_CHARGE:
@@ -336,6 +343,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 	void GiveDexSkill(int dexVal, PlayerPawn currentPlayerObj)
 	{
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
+		
 		switch (dexVal)
 		{
 			case FEROCITY_LEVEL_ENERGY:
@@ -396,7 +406,7 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		Super.PostBeginPlay();
 
 		let statItem = GetStats();
-		SetAmmoMax(statItem);
+		SetAmmoMax(statItem, self);
 
 		MaxHealth = statItem.MaxHealth;
 
