@@ -45,16 +45,12 @@ class fonMorphPower : HNecroMorphPower
                 let playerStats = fonPlayer.GetStats();
                 if(!changeBack && playerStats && playerStats.Dexterity >= FEROCITY_LEVEL_INSTAMORPH)
                     instantChange = true;
-
-                // if (instantChange)
-                //     A_PrintBold("Instant Change!");
             }
             
         }
         
         if(p && p.morphTics && !instantChange)
 		{
-            //A_PrintBold("Unmorph case");
 			FindFloorCeiling(0);
 			if(owner.ceilingz < owner.floorz + 56.0)
 			{
@@ -73,7 +69,6 @@ class fonMorphPower : HNecroMorphPower
                 Owner.UnMorph(self, 0, true);
             }
             
-            //A_PrintBold("It's Morphin time!");
 			ownerObj.A_Morph(MorphType, 0x7FFFFFFF, MRF_WHENINVULNERABLE|MRF_FULLHEALTH|
 			MRF_ADDSTAMINA|MRF_LOSEACTUALWEAPON, "HNecroMorphFog", "HNecroMorphFog");
 			PrintPickupMessage(true, AnnounceMessage);
@@ -93,7 +88,7 @@ class fonSerpentMorph : fonMorphPower replaces HNecroSerpentMorph
 		Inventory.Icon "graphics/statusbar/MRPH1ICN.png";
 		Tag "$TAG_TransformSerpent";
 		Inventory.PickupMessage "$PKUP_TransformSerpent";
-		HNecroMorphPower.MorphType "HNecroPlayerMorphSerpent";
+		HNecroMorphPower.MorphType "fonMorphSerpent";
 		HNecroMorphPower.AnnounceMessage("$TRANSFORM_MESSAGE_SER");
 		HNecroMorphPower.HintMessage("$TRANSFORM_HINT_SER");
 	}
@@ -113,7 +108,7 @@ class fonGolemMorph : fonMorphPower replaces HNecroGolemMorph
 		Inventory.Icon "graphics/statusbar/MRPH2ICN.png";
 		Tag "$TAG_TransformGolem";
 		Inventory.PickupMessage "$PKUP_TransformGolem";
-		HNecroMorphPower.MorphType "HNecroPlayerMorphGolem";
+		HNecroMorphPower.MorphType "fonMorphGolem";
 		HNecroMorphPower.AnnounceMessage("$TRANSFORM_MESSAGE_GOL");
 		HNecroMorphPower.HintMessage("$TRANSFORM_HINT_GOL");
 	}

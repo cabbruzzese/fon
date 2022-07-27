@@ -36,7 +36,9 @@ const SCYTHE_LEVEL_RAISE = 44;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
+const FEROCITY_LEVEL_FORKTONGUE = 20;
 const FEROCITY_LEVEL_INSTAMORPH = 30;
+const FEROCITY_LEVEL_QUAKE = 40;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -287,8 +289,11 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		UpdateLevelStats(statItem);
 	}
 
-	void XPStatIncrease(int StatType)
+	void XPStatIncrease(int StatType, PlayerPawn currentPlayerObj)
 	{
+		if (!currentPlayerObj)
+			currentPlayerObj = self;
+		
 		let statItem = GetStats();
 
 		if (StatType == STAT_TYPE_STR)
@@ -296,51 +301,57 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		else if (StatType == STAT_TYPE_DEX)
 		{
 			statItem.Dexterity += 1;
-			GiveDexSkill(statItem.Dexterity);
+			GiveDexSkill(statItem.Dexterity, currentPlayerObj);
 		}
 		else if (StatType == STAT_TYPE_MAG)
 		{
 			statItem.Magic += 1;
-			GiveMagicSkill(statItem.Magic);
+			GiveMagicSkill(statItem.Magic, currentPlayerObj);
 		}
 
 		UpdateLevelStats(statItem);
 	}
 
-	void GiveMagicSkill(int magicVal)
+	void GiveMagicSkill(int magicVal, PlayerPawn currentPlayerObj)
 	{
 		switch (magicVal)
 		{
 			case STAFF_LEVEL_CHARGE:
-				A_Print("$TXT_SKILLSTAFFCHARGE");
+				currentPlayerObj.A_Print("$TXT_SKILLSTAFFCHARGE");
 				break;
 			case STAFF_LEVEL_SPREAD:
-				A_Print("$TXT_SKILLSTAFFSPREAD");
+				currentPlayerObj.A_Print("$TXT_SKILLSTAFFSPREAD");
 				break;
 			case ICE_LEVEL_BREATH:
-				A_Print("$TXT_SKILLICEBREATH");
+				currentPlayerObj.A_Print("$TXT_SKILLICEBREATH");
 				break;
 			case TORNADO_LEVEL_LIGHTNING:
-				A_Print("$TXT_SKILLTORNADOLIGHTNING");
+				currentPlayerObj.A_Print("$TXT_SKILLTORNADOLIGHTNING");
 				break;
 			case SCYTHE_LEVEL_RAISE:
-				A_Print("$TXT_SKILLSCYTHERAISE");
+				currentPlayerObj.A_Print("$TXT_SKILLSCYTHERAISE");
 				break;
 		}
 	}
 
-	void GiveDexSkill(int dexVal)
+	void GiveDexSkill(int dexVal, PlayerPawn currentPlayerObj)
 	{
 		switch (dexVal)
 		{
 			case FEROCITY_LEVEL_ENERGY:
-				A_Print("$TXT_SKILLENERGY");
+				currentPlayerObj.A_Print("$TXT_SKILLENERGY");
 				break;
 			case FEROCITY_LEVEL_REGEN:
-				A_Print("$TXT_SKILLREGEN");
+				currentPlayerObj.A_Print("$TXT_SKILLREGEN");
+				break;
+			case FEROCITY_LEVEL_FORKTONGUE:
+				currentPlayerObj.A_Print("$TXT_SKILLFORKTONGUE");
 				break;
 			case FEROCITY_LEVEL_INSTAMORPH:
-				A_Print("$TXT_SKILLINSTAMORPH");
+				currentPlayerObj.A_Print("$TXT_SKILLINSTAMORPH");
+				break;
+			case FEROCITY_LEVEL_QUAKE:
+				currentPlayerObj.A_Print("$TXT_SKILLQUAKE");
 				break;
 		}
 	}
@@ -448,6 +459,12 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		return statItem.Magic;
 	}
 
+	int GetDexterity()
+	{
+		let statItem = GetStats();
+		return statItem.Dexterity;
+	}
+
 	void RegenerateHealth(int regenMax)
 	{
 		regenMax = Max(regenMax, REGENERATE_MIN_VALUE);
@@ -505,6 +522,32 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 
 		MaxHealth = statItem.MaxHealth;
 		A_SetHealth(MaxHealth);
+	}
+
+	override void AddInventory(Inventory item)
+	{
+		if (item is "HNecroSerpentMorph")
+		{	
+			A_GiveInventory("fonSerpentMorph");
+			return;
+		}
+		else if (item is "HNecroGolemMorph")
+		{
+			A_GiveInventory("fonGolemMorph");
+			return;
+		}
+		else if (item is "HNecroFireDemonMorph")
+		{
+			A_GiveInventory("fonFireDemonMorph");
+			return;
+		}
+		else if (item is "HNecroWyvernMorph")
+		{
+			A_GiveInventory("fonWyvernMorph");
+			return;
+		}
+
+		super.AddInventory(item);
 	}
 
 	static fonPlayer GetPlayerOrMorph(Actor obj)

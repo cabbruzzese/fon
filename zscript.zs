@@ -21,3 +21,5 @@ const DEBUG_MODE = 0;
 #include "zscript/RaiseDead.zs"
 #include "zscript/EventHandlers.zs"
 #include "zscript/fonMorph.zs"
+#include "zscript/fonMorphSerpent.zs"
+#include "zscript/fonMorphGolem.zs"

@@ -15,6 +15,24 @@ class ExpStatItem : PowerupGiver
 		Inventory.MaxAmount 100;
 	}
 
+	bool ReduceInventory(Actor ownerObj, name itemType)
+	{
+		if (!ownerObj)
+			return false;
+		
+		let itemObj = ExpStatItem(ownerObj.FindInventory(itemType));
+		if (!itemObj)
+			return false;
+
+		if (itemObj.Amount < 1)
+			return false;
+
+		if (itemObj.StatType == StatType)
+			return false;
+		
+		return ownerObj.A_TakeInventory(itemType, 1);
+	}
+
 	override bool Use (bool pickup)
 	{
 		if (Owner == null) return true;
@@ -22,15 +40,15 @@ class ExpStatItem : PowerupGiver
 		let fonPlayer = fonPlayer.GetPlayerOrMorph(Owner);
 		if (fonPlayer)
         {
-            fonPlayer.XPStatIncrease(StatType);
+            fonPlayer.XPStatIncrease(StatType, PlayerPawn(Owner));
             
             //Decrease all stat items
-            Owner.A_TakeInventory("ExpStrItem", 1);
-            Owner.A_TakeInventory("ExpDexItem", 1);
-            Owner.A_TakeInventory("ExpMagItem", 1);
+			ReduceInventory(Owner, "ExpStrItem");
+			ReduceInventory(Owner, "ExpDexItem");
+			ReduceInventory(Owner, "ExpMagItem");
         }
 
-		return false;
+		return true;
 	}
 	
 	override void Tick()
