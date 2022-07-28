@@ -6,7 +6,7 @@ class fonMorphSerpent : HNecroPlayerMorphSerpent replaces HNecroPlayerMorphSerpe
 	}
 }
 
-class fonWeaponSerpent : HNecroPlayerWeaponSerpent
+class fonWeaponSerpent : HNecroPlayerWeaponSerpent replaces HNecroPlayerWeaponSerpent
 {
 	States
 	{
@@ -30,24 +30,9 @@ class fonWeaponSerpent : HNecroPlayerWeaponSerpent
 		if (!fp)
 			return;
 
-		int maxDamage = 6 + (fp.GetDexterity() / 4);
+		int maxDamage = 6 + (fp.GetDexterity() / 3);
 		int damage = random(1, maxDamage);
 		A_CustomPunch(damage, true, 0, "", meleesound:"snake/bite", misssound:"snake/bite");
-	}
-
-	action void A_HoNSerpentTongueCheck()
-	{
-		if(player && player.ReadyWeapon)
-		{
-			if(weaponspecial-- <= 0)
-			{
-				player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState ("ReadyTongue"));
-				weaponspecial = random(20, 140);
-				A_StartSound("snake/idle", CHAN_WEAPON);
-			}
-			else
-				A_HoNMorphWeaponReady();
-		}
 	}
 
 	action void A_fonSerpentSpit()
@@ -69,7 +54,7 @@ class Hon_SerpentBall_PlayerSplit : HON_SerpentBall
 	states
 	{
 	Spawn:
-		srpb AAAAA 4;
+		srpb AAAA 4;
 		srpb A 0 A_SerpentBallSplit;
 		Stop;
 	}
@@ -88,7 +73,7 @@ class Hon_SerpentBall_PlayerSplit : HON_SerpentBall
 
 	action void A_SerpentBallSplit()
 	{
-		A_FireBallSplit(-10);
-		A_FireBallSplit(10);
+		A_FireBallSplit(-6);
+		A_FireBallSplit(6);
 	}
 }

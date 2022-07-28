@@ -186,14 +186,12 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		SetAmmoTypeMax("HNecroWeaponMorphAmmo", AMMO_MAX_MORPH, statItem.Dexterity, currentPlayerObj);
 	}
 
-	const HEALTH_MAX_BASE = 50;
-	const HEALTH_MAX_STEP = 5;
-	const HEALTH_MAX_STEP_ALT = 3;
+	const HEALTH_MAX_BASE = 45;
+	const HEALTH_MAX_STEP = 4;
+	const HEALTH_MAX_STEP_ALT = 2;
 	void SetHealthMax (PlayerLevelItem statItem)
 	{
-		int maxHealthStepStr = HEALTH_MAX_STEP * statItem.Strength;
-		int maxHealthStepDex = HEALTH_MAX_STEP_ALT * statItem.Dexterity;
-		int maxHealthStep = max(maxHealthStepStr, maxHealthStepDex);
+		int maxHealthStep = (HEALTH_MAX_STEP * statItem.Strength) + (HEALTH_MAX_STEP_ALT * statItem.Dexterity);
 
 		int maxHealthNew = HEALTH_MAX_BASE + maxHealthStep;
 		int healthDifference = maxHealthNew - MaxHealth;
