@@ -36,9 +36,11 @@ const SCYTHE_LEVEL_RAISE = 44;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
-const FEROCITY_LEVEL_FORKTONGUE = 20;
-const FEROCITY_LEVEL_INSTAMORPH = 30;
-const FEROCITY_LEVEL_QUAKE = 40;
+const FEROCITY_LEVEL_FORKTONGUE = 22;
+const FEROCITY_LEVEL_INSTAMORPH = 38;
+const FEROCITY_LEVEL_REGEN2 = 44;
+const FEROCITY_LEVEL_QUAKE = 50;
+const FEROCITY_LEVEL_DEMONCHARGE = 56;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -358,8 +360,14 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 			case FEROCITY_LEVEL_INSTAMORPH:
 				currentPlayerObj.A_Print("$TXT_SKILLINSTAMORPH");
 				break;
+			case FEROCITY_LEVEL_REGEN2:
+				currentPlayerObj.A_Print("$TXT_SKILLREGEN2");
+				break;
 			case FEROCITY_LEVEL_QUAKE:
 				currentPlayerObj.A_Print("$TXT_SKILLQUAKE");
+				break;
+			case FEROCITY_LEVEL_DEMONCHARGE:
+				currentPlayerObj.A_Print("$TXT_SKILLDEMONCHARGE");
 				break;
 		}
 	}
@@ -490,6 +498,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 		if (statItem.Dexterity >= FEROCITY_LEVEL_REGEN)
 		{
 			int regenMax = statItem.Dexterity + REGENERATE_MIN_VALUE;
+			if (statItem.Dexterity >= FEROCITY_LEVEL_REGEN2)
+				regenMax = MaxHealth / 2;
+			
 			RegenerateHealth(regenMax);
 		}
 	}

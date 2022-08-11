@@ -217,6 +217,28 @@ class WanderingMonsterItem : Powerup
 		Owner.A_SetRenderStyle(1.0, STYLE_Normal);
     }
 
+    void SetBruteStats(float bruteScale)
+    {
+        Owner.A_SetHealth(Owner.Health * (bruteScale * 1.5));
+
+        if (Owner.StartHealth < Owner.Health)
+            Owner.StartHealth = Owner.Health;
+    }
+
+    bool SetBruteSize(float bruteScale)
+    {
+        let newRadius = Owner.radius * (bruteScale / 2);
+        let newHeight = owner.height * bruteScale;
+
+        if (Owner.A_SetSize(newRadius, newHeight, true))
+        {
+            Owner.A_SetScale(bruteScale);
+            return true;
+        }
+
+        return false;
+    }
+
     void SetBrute()
     {
         int sizeCount = 1;
@@ -226,13 +248,9 @@ class WanderingMonsterItem : Powerup
         {
             sizeCount++;
 
-            let newRadius = Owner.radius * (bruteScale / 2);
-            let newHeight = owner.height * bruteScale;
-
-            if (Owner.A_SetSize(newRadius, newHeight, true))
+            if (SetBruteSize(bruteScale))
             {
-		        Owner.A_SetScale(bruteScale);
-                Owner.A_SetHealth(Owner.Health * (bruteScale * 1.5));
+                SetBruteStats(bruteScale);
                 return;
             }
 
@@ -282,6 +300,10 @@ class WanderingMonsterItem : Powerup
             Owner.A_SetHealth(Owner.Health * 3.5);
     		Owner.DamageMultiply += 1;
 		}
+
+        //Update max
+        if (Owner.StartHealth < Owner.Health)
+            Owner.StartHealth = Owner.Health;
 
         Owner.DamageMultiply += 0.5;
 	}

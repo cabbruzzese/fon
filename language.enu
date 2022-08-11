@@ -17,10 +17,12 @@ TXT_SKILLICEBREATH = "The Ice Ring is powered with Ice Breath.";
 TXT_SKILLTORNADOLIGHTNING = "The Tornado spell is powered with Lightning Strikes.";
 TXT_SKILLSCYTHERAISE = "The Scythe is powered with Raising the Dead.";
 
-TXT_SKILLENERGY = "Your ferocity now lusts for blood energy.";
-TXT_SKILLREGEN = "Your ferocity now sustains you with regeneration.";
-TXT_SKILLFORKTONGUE = "Your ferocity grants you forked acid spray.";
-TXT_SKILLINSTAMORPH = "Your ferocity allows you to instantly change forms.";
-TXT_SKILLQUAKE = "Your ferocity grants you earth shattering quakes.";
+TXT_SKILLENERGY = "Your transformations lust for blood energy.";
+TXT_SKILLREGEN = "You are sustained with regeneration.";
+TXT_SKILLFORKTONGUE = "Your snake form now has forked acid spray.";
+TXT_SKILLINSTAMORPH = "You can now instantly change between transformations.";
+TXT_SKILLREGEN2 = "Your regeneration becomes stronger.";
+TXT_SKILLQUAKE = "Your stone golem form can cause earth shattering quakes.";
+TXT_SKILLDEMONCHARGE = "Your fire demon form can now charge infernos";
 
 TXT_NOTRANSFORMUSE = "This cannot be used while transformed.";

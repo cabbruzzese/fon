@@ -23,3 +23,5 @@ const DEBUG_MODE = 0;
 #include "zscript/fonMorph.zs"
 #include "zscript/fonMorphSerpent.zs"
 #include "zscript/fonMorphGolem.zs"
+#include "zscript/fonMorphDemon.zs"
+#include "zscript/fonMorphWyvern.zs"

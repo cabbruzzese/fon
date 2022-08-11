@@ -1,4 +1,8 @@
 //-----------------------------------------------------------------------------
+// Code modified by from HON for Feat of Necromancy Mod. Original license below
+//                      - peewee
+//-----------------------------------------------------------------------------
+//
 // Copyright 2019-2022 HON Team, Frechou Games
 // Copyright 1993-2022 GZDoom Team, id Software, and contributors
 //
@@ -128,7 +132,7 @@ class fonFireDemonMorph : fonMorphPower replaces HNecroFireDemonMorph
 		Inventory.Icon "graphics/statusbar/MRPH3ICN.png";
 		Tag "$TAG_TransformFireDemon";
 		Inventory.PickupMessage "$PKUP_TransformFireDemon";
-		HNecroMorphPower.MorphType "HNecroPlayerMorphFireDemon";
+		HNecroMorphPower.MorphType "fonMorphDemon";
 		HNecroMorphPower.AnnounceMessage("$TRANSFORM_MESSAGE_DEM");
 		HNecroMorphPower.HintMessage("$TRANSFORM_HINT_DEM");
 	}
@@ -148,7 +152,7 @@ class fonWyvernMorph : fonMorphPower replaces HNecroWyvernMorph
 		Inventory.Icon "graphics/statusbar/MRPH4ICN.png";
 		Tag "$TAG_TransformWyvern";
 		Inventory.PickupMessage "$PKUP_TransformWyvern";
-		HNecroMorphPower.MorphType "HNecroPlayerMorphWyvern";
+		HNecroMorphPower.MorphType "fonMorphWyvern";
 		HNecroMorphPower.AnnounceMessage("$TRANSFORM_MESSAGE_WYV");
 		HNecroMorphPower.HintMessage("$TRANSFORM_HINT_WYV");
 	}

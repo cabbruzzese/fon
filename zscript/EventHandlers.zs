@@ -26,6 +26,20 @@ class BossMaker : EventHandler
             InitWanderingMonster(e.thing);
         }
     }
+
+    override void WorldThingRevived(WorldEvent e)
+    {
+        Actor revivedObj = Actor(e.thing);
+        if (!revivedObj || !revivedObj.bIsMonster)
+            return;
+        
+        let monsterItem = WanderingMonsterItem(revivedObj.FindInventory("WanderingMonsterItem"));
+        if (monsterItem && monsterItem.BossFlag & WMF_BRUTE)
+        {
+            int oldHealth = revivedObj.Health;
+            monsterItem.SetBruteSize(revivedObj.ScaleX);
+        }
+    }
 }
 
 const REPOP_TIMEOUT_MAX = 1500;
