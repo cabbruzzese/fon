@@ -84,6 +84,9 @@ class Hon_SerpentBall_PlayerSplit : HON_SerpentBall
 
 	action void A_FireBallSplit(int angleMod)
 	{
+		if (!target)
+			return;
+		
 		let mo = target.SpawnPlayerMissile ("HON_SerpentBall_Player", angle + angleMod);
 		if (mo != null)
 		{

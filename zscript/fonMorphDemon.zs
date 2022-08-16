@@ -257,6 +257,7 @@ class fonFireDemonMissile_Player : HoN_FireDemonMissile_Player replaces HoN_Fire
 			{
 				SpeedCounter = -99;
 				Vel3DFromAngle(DEMONMISSILE_SPEED_MAX, angle, BulletSlope());
+				A_StartSound("firedemon/fireball");
 			}
 			else
 			{
