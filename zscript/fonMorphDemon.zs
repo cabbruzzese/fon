@@ -57,7 +57,7 @@ class fonWeaponDemon: HNecroPlayerWeaponFireDemon replaces HNecroPlayerWeaponFir
 		WDEM CDE 2;
     Hold:
         WDEM F 2 A_ChargeUp;
-        WEDM F 0 A_CheckDex(FEROCITY_LEVEL_DEMONCHARGE, "FireFinish");
+        WEDM F 0 A_CheckDex(FEROCITY_LEVEL_DEMONCHARGE, "FireFinish", FLAME_VILE_COST);
         WDEM F 0 A_DFlameVileScan;
         WDEM F 0 A_Refire;
     FireFinish:
@@ -98,12 +98,25 @@ class fonWeaponDemon: HNecroPlayerWeaponFireDemon replaces HNecroPlayerWeaponFir
         }
         else
         {
-            A_HoNFireDemonShotgun();
+            A_fonFireDemonShotgunBlast();
         }
 	}
 
-    action void A_CheckDex(int dexMin, StateLabel fallbackState)
-    {
+	action void A_fonFireDemonShotgunBlast()
+	{
+		A_TakeInventory("HNecroWeaponMorphAmmo", 7);
+		A_StartSound("firedemon/fireball", CHAN_WEAPON);
+		A_Quake(7, 7, 0, 640, "");		
+		//X-shape
+		A_FireProjectile("fonFireDemonMissile_Player", 0, false);
+		A_FireProjectile("fonFireDemonMissile_Player", 0, false, 16, 16);
+		A_FireProjectile("fonFireDemonMissile_Player", 0, false, -16, 16);
+		A_FireProjectile("fonFireDemonMissile_Player", 0, false, 16, -16);
+		A_FireProjectile("fonFireDemonMissile_Player", 0, false, -16, -16);
+	}
+
+    action void A_CheckDex(int dexMin, StateLabel fallbackState, int ammoCheck = 0)
+    {		
         Weapon w = player.ReadyWeapon;
         if(!player)
 			return;
@@ -111,9 +124,15 @@ class fonWeaponDemon: HNecroPlayerWeaponFireDemon replaces HNecroPlayerWeaponFir
 		if (!fp)
 			return;
 
+		if (!w)
+			return;
+		
+		if (ammoCheck > 0 && w.Ammo1.Amount < ammoCheck)
+			player.SetPsprite(PSP_WEAPON, w.FindState(fallbackState));
+
 		int dex = fp.GetDexterity();
 
-        if (dex < dex)
+        if (dex < dexMin)
             player.SetPsprite(PSP_WEAPON, w.FindState(fallbackState));
     }
 
@@ -121,7 +140,7 @@ class fonWeaponDemon: HNecroPlayerWeaponFireDemon replaces HNecroPlayerWeaponFir
 	{
 		if (invoker.ChargeValue < DEMON_CHARGE_MAX)
 			return;
-		
+
 		FTranslatedLineTarget t;
 		
 		int lineDamage = 0;
@@ -202,7 +221,7 @@ class FlameVilePuffBoom : Actor
 		+PUFFONACTORS
 		VSpeed 0;
         Speed 0;
-		DamageType "Fire";
+		SeeSound "enemies/priest/projectiles/collision";
 	}
 	States
 	{
@@ -210,4 +229,41 @@ class FlameVilePuffBoom : Actor
         LFC1 ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 BRIGHT Light("FLICKERFLAME");
 		Stop;
 	}
+}
+
+const DEMONMISSILE_CHANCE_MAX = 100;
+const DEMONMISSILE_TIMER_MAX = 18;
+const DEMONMISSILE_TIMER_RESET = 3;
+const DEMONMISSILE_SPEED_MAX = 70;
+class fonFireDemonMissile_Player : HoN_FireDemonMissile_Player replaces HoN_FireDemonMissile_Player
+{
+	int speedCounter;
+	property SpeedCounter : speedCounter;
+	Default
+	{
+		Speed 2;
+		FastSpeed 2;
+		fonFireDemonMissile_Player.speedCounter DEMONMISSILE_TIMER_MAX;
+	}
+
+	override void Tick()
+	{
+		if (SpeedCounter > -99)
+			SpeedCounter --;
+
+		if (SpeedCounter == 0)
+		{
+			if (random(1,5) == 1)
+			{
+				SpeedCounter = -99;
+				Vel3DFromAngle(DEMONMISSILE_SPEED_MAX, angle, BulletSlope());
+			}
+			else
+			{
+				SpeedCounter = DEMONMISSILE_TIMER_RESET;
+			}
+		}
+		super.Tick();
+	}
+
 }

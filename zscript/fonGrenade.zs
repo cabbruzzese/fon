@@ -40,7 +40,8 @@ class fonGrenade : HNecroWeaponGrenade replaces HNecroWeaponGrenade
 		GNDW A 1 A_fonGrenadeReady;
 		Loop;		
 	Fire:
-		GNDW B 8;
+		GNDW A 3;
+		GNDW B 5;
 	Hold:
 		GNDW B 1;
 		GNDW B 1 A_TickTimer;
