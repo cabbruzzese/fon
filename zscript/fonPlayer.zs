@@ -41,6 +41,7 @@ const FEROCITY_LEVEL_INSTAMORPH = 38;
 const FEROCITY_LEVEL_REGEN2 = 44;
 const FEROCITY_LEVEL_QUAKE = 50;
 const FEROCITY_LEVEL_DEMONCHARGE = 56;
+const FEROCITY_LEVEL_WYVERNFLY = 62;
 
 class fonPlayer : HNecroPlayer replaces HNecroPlayer
 {
@@ -368,6 +369,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				break;
 			case FEROCITY_LEVEL_DEMONCHARGE:
 				currentPlayerObj.A_Print("$TXT_SKILLDEMONCHARGE");
+				break;
+			case FEROCITY_LEVEL_WYVERNFLY:
+				currentPlayerObj.A_Print("$TXT_SKILLWYVERNFLY");
 				break;
 		}
 	}

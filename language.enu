@@ -24,5 +24,6 @@ TXT_SKILLINSTAMORPH = "You can now instantly change between transformations.";
 TXT_SKILLREGEN2 = "Your regeneration becomes stronger.";
 TXT_SKILLQUAKE = "Your stone golem form can cause earth shattering quakes.";
 TXT_SKILLDEMONCHARGE = "Your fire demon form can now charge infernos";
+TXT_SKILLWYVERNFLY = "Your Wyvern form can now fire dash";
 
 TXT_NOTRANSFORMUSE = "This cannot be used while transformed.";

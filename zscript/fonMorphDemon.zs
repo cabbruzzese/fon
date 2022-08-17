@@ -90,7 +90,7 @@ class fonWeaponDemon: HNecroPlayerWeaponFireDemon replaces HNecroPlayerWeaponFir
 
         if (invoker.ChargeValue >= DEMON_CHARGE_MAX && w.Ammo1.Amount >= FLAME_VILE_COST)
         {
-            A_TakeInventory("HNecroWeaponMorphAmmo", 25);
+            A_TakeInventory("HNecroWeaponMorphAmmo", FLAME_VILE_COST);
             A_StartSound("firedemon/fireball", CHAN_WEAPON);
             A_Quake(7, 7, 0, 640, "");		
             
