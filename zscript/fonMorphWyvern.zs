@@ -129,7 +129,7 @@ class fonWeaponWyvern: HNecroPlayerWeaponWyvern replaces HNecroPlayerWeaponWyver
 		WYVW FGB 4;
 		Goto Ready;
 	DashAttack:
-		WYVW EEE 6 bright Light("WYVERNBLAST2") A_fonDashAttack;
+		WYVW EEEEEE 3 bright Light("WYVERNBLAST2") A_fonDashAttack;
 	DashAttackFinish:
 		WYVW FGB 4;
 		WYVW A 12;
@@ -174,6 +174,7 @@ class fonWeaponWyvern: HNecroPlayerWeaponWyvern replaces HNecroPlayerWeaponWyver
 
 			A_Stop();
 			A_RadiusThrust(WYVERN_EXPLODE_THRUST, WYVERN_EXPLODE_RANGE, RTF_NOIMPACTDAMAGE);
+			Thrust(WYVERN_EXPLODE_THRUST, angle + 180);
 			A_GiveInventory("HNecroStunEffect1Sec");
 			player.SetPsprite(PSP_WEAPON, w.FindState("DashAttackFinish"));
 		}

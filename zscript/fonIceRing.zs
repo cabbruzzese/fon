@@ -84,4 +84,16 @@ class IceRingFreeze : HON_Enemy_IceGolem_Icethrower
     {
         Speed 6;
     }
+	states
+	{
+	Spawn:
+		IGTA ABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJ 1
+		{
+			A_SetScale(Scale.X * 1.0125);
+			SetDamage(random(0, 3) ? 0 : 1);
+		}
+	Death:
+		IGTA KLMNOPQRST 1;
+		Stop;
+	}
 }

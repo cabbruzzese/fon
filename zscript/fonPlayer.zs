@@ -29,10 +29,11 @@ const REGENERATE_TICKS_MAX_DEFAULT = 80;
 const REGENERATE_MIN_VALUE = 15;
 
 const STAFF_LEVEL_SPREAD = 10;
-const ICE_LEVEL_BREATH = 16;
-const STAFF_LEVEL_CHARGE = 22;
-const TORNADO_LEVEL_LIGHTNING = 28;
-const SCYTHE_LEVEL_RAISE = 44;
+const ICE_LEVEL_BREATH = 18;
+const STAFF_LEVEL_CHARGE = 26;
+const TORNADO_LEVEL_LIGHTNING = 34;
+const SCYTHE_LEVEL_RAISE = 46;
+const STAFF_LEVEL_CHARGE2 = 58;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
@@ -335,6 +336,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				break;
 			case TORNADO_LEVEL_LIGHTNING:
 				currentPlayerObj.A_Print("$TXT_SKILLTORNADOLIGHTNING");
+				break;
+			case STAFF_LEVEL_CHARGE2:
+				currentPlayerObj.A_Print("$TXT_SKILLSTAFFCHARGE2");
 				break;
 			case SCYTHE_LEVEL_RAISE:
 				currentPlayerObj.A_Print("$TXT_SKILLSCYTHERAISE");

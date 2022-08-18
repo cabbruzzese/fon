@@ -16,6 +16,7 @@ TXT_SKILLSTAFFSPREAD = "The Fireball Staff is powered with Scorching Spray.";
 TXT_SKILLICEBREATH = "The Ice Ring is powered with Ice Breath.";
 TXT_SKILLTORNADOLIGHTNING = "The Tornado spell is powered with Lightning Strikes.";
 TXT_SKILLSCYTHERAISE = "The Scythe is powered with Raising the Dead.";
+TXT_SKILLSTAFFCHARGE2 = "The Fireball Staff is powered with Meteor Swarm.";
 
 TXT_SKILLENERGY = "Your transformations lust for blood energy.";
 TXT_SKILLREGEN = "You are sustained with regeneration.";
