@@ -317,3 +317,18 @@ class TestMover
 		return result;
 	}
 }
+
+class EmptyPuff : Actor
+{
+	Default
+	{
+		+NOBLOCKMAP +NOGRAVITY
+		+PUFFONACTORS
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+		Stop;
+	}
+}

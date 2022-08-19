@@ -161,7 +161,7 @@ class fonWeaponWyvern: HNecroPlayerWeaponWyvern replaces HNecroPlayerWeaponWyver
 		FTranslatedLineTarget t;
 		int lineDamage = 0;
 		double slope = AimLineAttack (angle, WYVERN_THRUST_CHECKRANGE);
-		let puffObj = LineAttack(angle, WYVERN_THRUST_CHECKRANGE, slope, lineDamage, "Fire", "WyvernScanPuff", true, t);
+		let puffObj = LineAttack(angle, WYVERN_THRUST_CHECKRANGE, slope, lineDamage, "Fire", "EmptyPuff", true, t);
 		if (puffObj)
 		{
 			let mo = SpawnPlayerMissile("WyvernExplosionPuff");
@@ -220,21 +220,6 @@ class fonWeaponWyvern: HNecroPlayerWeaponWyvern replaces HNecroPlayerWeaponWyver
         if (dex < dexMin)
             player.SetPsprite(PSP_WEAPON, w.FindState(fallbackState));
     }
-}
-
-class WyvernScanPuff : Actor
-{
-	Default
-	{
-		+NOBLOCKMAP +NOGRAVITY
-		+PUFFONACTORS
-	}
-	States
-	{
-	Spawn:
-		TNT1 A 0;
-		Stop;
-	}
 }
 
 class WyvernExplosionPuff : Actor

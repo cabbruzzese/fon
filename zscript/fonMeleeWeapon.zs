@@ -46,7 +46,7 @@ class fonMeleeWeapon : HNecroWeaponSword
 		int useammo;
 		if(usesAmmo && (useammo = (w.Ammo1 && w.Ammo1.Amount > 0)))
 		{
-			damage += fp.GetMagic();
+			damage += fp.GetMagic() * 0.5;
 			pufftype = horizontal ? "HNecroWeaponSwordPuffGlowHoriz" : "HNecroWeaponSwordPuffGlow";
 		}
 		for(int i = 0; i < 16; i++)

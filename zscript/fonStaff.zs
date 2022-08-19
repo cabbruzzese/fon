@@ -21,11 +21,12 @@
 //
 //-----------------------------------------------------------------------------
 
-const STAFF_CHARGE_MID = 15;
-const STAFF_CHARGE_MAX = 30;
+const STAFF_CHARGE_MID = 10;
+const STAFF_CHARGE_MAX = 20;
 const STAFF_SPREAD_COST = 2;
 const STAFF_CHARGE_COST = 2;
-const STAFF_METEOR_COST = 8;
+const STAFF_METEOR_COST = 2;
+const STAFF_METEOR_FORWARD = 30;
 class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
 {
     int chargeValue;
@@ -73,9 +74,18 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
     action void A_StaffShootMeteors()
     {
         FindFloorCeiling(0);
-        int spawnz = min (ceilingz - 10.0, pos.z + height + 10.0) - pos.z;
+        int spawnz = min (ceilingz - 10.0, pos.z + height) - pos.z;
+        let forwardOffset = AngleToVector(angle, STAFF_METEOR_FORWARD);
+
         for(int i = 0; i < 3; i++)
-            A_SpawnProjectile("fonStaffMeteorCharging", spawnz, (i - 1) * 40);
+        {
+            let mo = A_SpawnProjectile("fonStaffMeteorCharging", spawnz, 40 - (i * 40));
+            if (mo)
+            {
+                mo.SetOrigin(mo.Pos + forwardOffset, false);
+                mo.A_SetHealth((i * 1) + 1);
+            }
+        }
     }
 
     action void A_StaffShootCharge()
@@ -86,8 +96,8 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
 
         if (invoker.ChargeValue >= STAFF_CHARGE_MAX && w.Ammo1.Amount >= STAFF_METEOR_COST)
         {
-            A_StaffShootMeteors();
             w.DepleteAmmo(false, true, STAFF_METEOR_COST);
+            A_StaffShootMeteors();
         }
         else if (invoker.ChargeValue >= STAFF_CHARGE_MID && w.Ammo1.Amount >= STAFF_CHARGE_COST)
         {
@@ -209,21 +219,53 @@ class StaffFireballLarge : HON_Acolyte_Attack
 	}
 }
 
+const METEOR_REAIM_RANGE = 1536;
 class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
 {
-	states
+    Default
+    {
+        RenderStyle "Translucent";
+        Alpha 0.6;
+    }
+	States
 	{
 	Spawn:
-		gcfc aabbccddeeffgghhiijj 1 bright Light("FIREDEMON")
+		GCFC abcdefghij 1 bright Light("FIREDEMON")
 		{
-			Scale.X *= 1.025;
-			Scale.Y *= 1.025;
+            if (Scale.X < 2.0)
+            {
+                Scale.X *= 1.025;
+                Scale.Y *= 1.025;
+            }
 		}
-        gcfc j 1 bright Light("FIREDEMON") A_FireMeteor;
+        GCFC j 0 bright Light("FIREDEMON")
+		{
+            Health--;
+		}
+        GCFC j 0 A_JumpIfHealthLower(1, "SpawnFinish");
+        Loop;
+    SpawnFinish:
+        GCFC j 1 bright Light("FIREDEMON") A_FireMeteor;
 	Death:
 		"####" "#" 1 BRIGHT Light("FIREDEMON") A_FadeOut;
 		Loop;
 	}
+
+    action void A_ReAim(Actor meteorObj)
+    {
+        if (!target || !meteorObj)
+            return;
+        
+		FTranslatedLineTarget t;
+		
+		int lineDamage = 0;
+		double slope = target.AimLineAttack (target.angle, METEOR_REAIM_RANGE);
+		let puffObj = target.LineAttack(target.angle, METEOR_REAIM_RANGE, slope, lineDamage, "Fire", "EmptyPuff", LAF_NOINTERACT, t);
+		if (puffObj != null)
+		{
+            meteorObj.A_Face(puffObj);
+		}
+    }
 
     action void A_FireMeteor()
     {
@@ -242,6 +284,7 @@ class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
         {
             mo.SetOrigin(Pos, false);
             mo.target = target;
+            A_ReAim(mo);
         }
     }
 }

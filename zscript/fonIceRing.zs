@@ -70,7 +70,7 @@ class fonIceRing : HNecroWeaponIceRing replaces HNecroWeaponIceRing
 
         	w.DepleteAmmo(false, true, 1);
             
-            A_StartSound("icegolem/blizzard");
+            A_StartSound("icegolem/blizzard", CHAN_WEAPON);
     		HoNWeaponQuake(3, 4);
         }
 
@@ -90,7 +90,7 @@ class IceRingFreeze : HON_Enemy_IceGolem_Icethrower
 		IGTA ABCDEFGHIJABCDEFGHIJABCDEFGHIJABCDEFGHIJ 1
 		{
 			A_SetScale(Scale.X * 1.0125);
-			SetDamage(random(0, 3) ? 0 : 1);
+			SetDamage(random(0, 4) ? 0 : 1);
 		}
 	Death:
 		IGTA KLMNOPQRST 1;
