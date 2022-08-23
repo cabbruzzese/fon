@@ -25,8 +25,10 @@ const STAFF_CHARGE_MID = 10;
 const STAFF_CHARGE_MAX = 20;
 const STAFF_SPREAD_COST = 2;
 const STAFF_CHARGE_COST = 2;
-const STAFF_METEOR_COST = 2;
-const STAFF_METEOR_FORWARD = 30;
+const STAFF_METEOR_COST = 3;
+const STAFF_METEOR_FORWARD = 35;
+const STAFF_METEOR_HEIGHTOFFSET = 25;
+const STAFF_METEOR_RIGHTOFFSET = 30;
 class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
 {
     int chargeValue;
@@ -74,12 +76,12 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
     action void A_StaffShootMeteors()
     {
         FindFloorCeiling(0);
-        int spawnz = min (ceilingz - 10.0, pos.z + height) - pos.z;
+        int spawnz = min (ceilingz - 10.0, pos.z + STAFF_METEOR_HEIGHTOFFSET) - pos.z;
         let forwardOffset = AngleToVector(angle, STAFF_METEOR_FORWARD);
 
         for(int i = 0; i < 3; i++)
         {
-            let mo = A_SpawnProjectile("fonStaffMeteorCharging", spawnz, 40 - (i * 40));
+            let mo = A_FireProjectile("fonStaffMeteorCharging", 0, false, STAFF_METEOR_RIGHTOFFSET - (i * STAFF_METEOR_RIGHTOFFSET), spawnz);
             if (mo)
             {
                 mo.SetOrigin(mo.Pos + forwardOffset, false);
@@ -96,13 +98,13 @@ class fonStaff : HNecroWeaponStaff replaces HNecroWeaponStaff
 
         if (invoker.ChargeValue >= STAFF_CHARGE_MAX && w.Ammo1.Amount >= STAFF_METEOR_COST)
         {
-            w.DepleteAmmo(false, true, STAFF_METEOR_COST);
+            w.Ammo1.Amount -= STAFF_METEOR_COST;
             A_StaffShootMeteors();
         }
         else if (invoker.ChargeValue >= STAFF_CHARGE_MID && w.Ammo1.Amount >= STAFF_CHARGE_COST)
         {
-            w.DepleteAmmo(false, true, STAFF_CHARGE_COST);
-            A_FireProjectile("StaffFireballLarge");
+            w.Ammo1.Amount -= STAFF_CHARGE_COST;
+            A_FireProjectile("StaffFireballLarge", 0, false);
             A_StartSound("weapons/staff/fire", CHAN_WEAPON);
             HoNWeaponQuake(1, 3);
         }
@@ -220,6 +222,7 @@ class StaffFireballLarge : HON_Acolyte_Attack
 }
 
 const METEOR_REAIM_RANGE = 1536;
+const METEOR_REAIM_SPEED = 18;
 class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
 {
     Default
@@ -263,7 +266,12 @@ class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
 		let puffObj = target.LineAttack(target.angle, METEOR_REAIM_RANGE, slope, lineDamage, "Fire", "EmptyPuff", LAF_NOINTERACT, t);
 		if (puffObj != null)
 		{
-            meteorObj.A_Face(puffObj);
+            Actor faceTarget = puffObj;
+            if (t.linetarget)
+                faceTarget = t.linetarget;
+            
+            meteorObj.A_Face(faceTarget, 0, 0, 0, 0, 0, 0);
+            meteorObj.VelIntercept(faceTarget, -1, false, true);
 		}
     }
 
@@ -272,12 +280,12 @@ class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
         if (!target)
             return;
         
-        Class<Actor> missileType = "HON_Bishop_Attack1";
+        Class<Actor> missileType = "fonPlayerBishopAttack1";
         int typeRand = Random(1,3);
         if (typeRand == 2)
-            missileType = "HON_Bishop_Attack2";
+            missileType = "fonPlayerBishopAttack2";
         else if (typeRand == 3)
-            missileType = "HON_Bishop_Attack3";
+            missileType = "fonPlayerBishopAttack3";
         
         let mo = target.SpawnPlayerMissile(missileType, target.angle);
         if (mo)
@@ -286,5 +294,27 @@ class fonStaffMeteorCharging : HON_Bishop_Attack_Charging
             mo.target = target;
             A_ReAim(mo);
         }
+    }
+}
+
+class fonPlayerBishopAttack1 : HON_Bishop_Attack1
+{
+    default
+    {
+        DamageFunction (random(15, 25));
+    }
+}
+class fonPlayerBishopAttack2 : HON_Bishop_Attack2
+{
+    default
+    {
+        DamageFunction (random(15, 25));
+    }
+}
+class fonPlayerBishopAttack3 : HON_Bishop_Attack3
+{
+    default
+    {
+        DamageFunction (random(15, 25));
     }
 }

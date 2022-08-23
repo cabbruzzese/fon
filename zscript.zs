@@ -25,3 +25,4 @@ const DEBUG_MODE = 0;
 #include "zscript/fonMorphGolem.zs"
 #include "zscript/fonMorphDemon.zs"
 #include "zscript/fonMorphWyvern.zs"
+#include "zscript/fonPistol.zs"

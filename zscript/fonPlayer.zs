@@ -34,6 +34,7 @@ const STAFF_LEVEL_CHARGE = 26;
 const TORNADO_LEVEL_LIGHTNING = 34;
 const SCYTHE_LEVEL_RAISE = 46;
 const STAFF_LEVEL_CHARGE2 = 58;
+const PISTOL_LEVEL_FIREAMMO = 64;
 
 const FEROCITY_LEVEL_ENERGY = 12;
 const FEROCITY_LEVEL_REGEN = 16;
@@ -342,6 +343,9 @@ class fonPlayer : HNecroPlayer replaces HNecroPlayer
 				break;
 			case SCYTHE_LEVEL_RAISE:
 				currentPlayerObj.A_Print("$TXT_SKILLSCYTHERAISE");
+				break;
+			case PISTOL_LEVEL_FIREAMMO:
+				currentPlayerObj.A_Print("$TXT_SKILLPISTOLFIRE");
 				break;
 		}
 	}

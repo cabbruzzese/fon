@@ -29,6 +29,7 @@ class fonMeleeWeapon : HNecroWeaponSword
 		Weapon.AmmoUse 1;
 		+WEAPON.AMMO_OPTIONAL
 		+WEAPON.NOALERT
+		+WEAPON.MELEEWEAPON
 	}
 
 	action void A_FonMeleeWeaponStrike(int meleeRange, int damageMin = 1, int damageMax = 20, bool horizontal = false, bool usesAmmo = true)

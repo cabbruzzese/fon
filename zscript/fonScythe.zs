@@ -56,7 +56,7 @@ class fonScythe : fonMeleeWeapon replaces HNecroWeaponScythe
 		TNT1 A 4 A_HoNScytheCheckAttackMelee;
 		SCYT B 4;
 		SCYT C 3;
-		SCYT D 3 A_FonMeleeWeaponStrike(SCYTHERANGE, 1, 55, false, false);
+		SCYT D 3 A_FonMeleeWeaponStrike(SCYTHERANGE, 1, 35, false, false);
 		SCYT E 3;
 		TNT1 A 11;
 		TNT1 A 0 A_HoNScytheRefire;
@@ -69,7 +69,7 @@ class fonScythe : fonMeleeWeapon replaces HNecroWeaponScythe
 		SCYT G 2
 		{
 			A_WeaponOffset(-80,10,WOF_ADD);
-			A_FonMeleeWeaponStrike(SCYTHERANGE, 1, 55, true, false);
+			A_FonMeleeWeaponStrike(SCYTHERANGE, 1, 35, true, false);
 		}
 		SCYT HH 2 A_WeaponOffset(-100,20,WOF_ADD);
 		TNT1 A 8 A_WeaponOffset(0,32);
@@ -142,10 +142,9 @@ class fonScythe : fonMeleeWeapon replaces HNecroWeaponScythe
 
         int magic = fp.GetMagic();
         if (magic >= SCYTHE_LEVEL_RAISE)
-        {            
-            //HNecroGlobal.A_HoNGolemQuake(fp, 0, 0, 384);
+        {
 			fp.A_SpawnItemEx("HON_StoneGolemShockwave", 0, 8, 1);
-            let rd = A_RadiusGive("RaiseDeadItem", 256, RGF_CORPSES);
+            let rd = A_RadiusGive("RaiseDeadItem", 256, RGF_CORPSES, 1, "", "", 0, 2);
         }
 	}
 

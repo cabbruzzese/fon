@@ -27,6 +27,15 @@ class RaiseDeadItem : Inventory
 		Spawn("HNecroMorphFog", Owner.Pos, ALLOW_REPLACE);
 		Owner.A_StartSound(mo.ActiveSound, CHAN_VOICE);
 
+        if (mo && mo.bFriendly)
+        {
+            actor marker = null;
+            bool success;
+			[success, marker] = A_SpawnItemEx("HNecroFriendMarker", 0, 0, mo.height + 10);
+			if(marker)
+				marker.Master = mo;
+        }
+
 		Owner.Destroy();
 
         return false;

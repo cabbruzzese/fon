@@ -7,6 +7,7 @@ GameInfo
 	WeaponSlot = 3, "fonIceRing"
 	WeaponSlot = 4, "fonTornado"
 	WeaponSlot = 5, "fonGrenade"
+	WeaponSlot = 6, "fonPistol"
 	WeaponSlot = 7, "fonScythe"
 
 	AddEventHandlers = "BossMaker", "RepopulationHandler"

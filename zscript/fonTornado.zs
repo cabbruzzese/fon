@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+const LIGHTNING_COST = 2;
 class fonTornado : HNecroWeaponTornado replaces HNecroWeaponTornado
 {
 	States
@@ -38,10 +39,17 @@ class fonTornado : HNecroWeaponTornado replaces HNecroWeaponTornado
 	action void TornadoLightningFire()
 	{
         Weapon w = player.ReadyWeapon;
-		if (!w.CheckAmmo(PrimaryFire, true, true, 1))
-            return;
+		if (w.Ammo1.Amount < LIGHTNING_COST)
+		{
+			if (w.CheckAmmo(PrimaryFire, true, true, 1))
+			{
+				w.Ammo1.Amount--;
+				A_HoNTornadoShoot();
+			}
+			return;
+		}
 
-        w.DepleteAmmo(false, true, 1);
+        w.Ammo1.Amount -= LIGHTNING_COST;
 
 		if (random(1,2) == 1)
             A_StartSound("undeadking/thunder1", CHAN_WEAPON);
