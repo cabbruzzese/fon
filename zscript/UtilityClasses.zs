@@ -332,3 +332,18 @@ class EmptyPuff : Actor
 		Stop;
 	}
 }
+
+class PlayersData
+{
+	play static int GetPlayerCount()
+	{
+		int total = 0;
+		for (int i = 0; i < MaxPlayers; i++)
+		{
+			if (playeringame[i])
+				total++;
+		}
+
+		return total;
+	}
+}

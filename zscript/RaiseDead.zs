@@ -31,7 +31,7 @@ class RaiseDeadItem : Inventory
         {
             actor marker = null;
             bool success;
-			[success, marker] = A_SpawnItemEx("HNecroFriendMarker", 0, 0, mo.height + 10);
+			[success, marker] = A_SpawnItemEx("fonFriendMarker", 0, 0, mo.height + 10);
 			if(marker)
 				marker.Master = mo;
         }

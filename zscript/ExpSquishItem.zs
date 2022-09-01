@@ -112,3 +112,39 @@ class ExpSquishItemGiver : PowerupGiver
 		Loop;
 	}
 }
+
+//Grant XP from summon hits
+class SummonExpSquishItem : ExpSquishItem
+{
+	override void ModifyDamage(int damage, Name damageType, out int newdamage, bool passive, Actor inflictor, Actor source, int flags)
+	{
+		if (!passive && damage > 0 && Owner && Owner.bFriendly)
+        {
+			GiveAllPlayersXP(source, damage, damageType);
+        }
+	}
+
+	void GiveAllPlayersXP(Actor xpSource, int damage, name damagetype)
+    {
+		int playerCount = PlayersData.GetPlayerCount();
+		if (playerCount == 0)
+			return;
+
+		int xp = damage / playerCount;
+		
+        for (int i = 0; i < MaxPlayers; i++)
+        {
+			if (playeringame[i])
+				GivePlayerXP(i, xpSource, xp, damagetype);
+        }
+    }
+	
+    void GivePlayerXP(int playerNum, Actor xpSource, int xp, name damagetype)
+    {
+        let fonPlayer = fonPlayer.GetPlayerOrMorph(players[playerNum].mo);
+		if (!fonPlayer)
+			return;
+
+		fonPlayer.DoXPHit(xpSource, xp, damagetype, players[playerNum].mo);
+    }
+}

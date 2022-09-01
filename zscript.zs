@@ -26,3 +26,4 @@ const DEBUG_MODE = 0;
 #include "zscript/fonMorphDemon.zs"
 #include "zscript/fonMorphWyvern.zs"
 #include "zscript/fonPistol.zs"
+#include "zscript/fonNecroHand.zs"

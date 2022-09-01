@@ -39,7 +39,24 @@ class fonFriendMarker : HNecroFriendMarker replaces HNecroFriendMarker
 	States
 	{
 	Spawn:
+		ALYM A 10;
+		ALYM B 10 A_GiveSquishItem;
+		Loop;
+	MarkerAnimate:
 		ALYM AB 10 BRIGHT;
 		Loop;
+	}
+
+	action void A_GiveSquishItem ()
+	{		
+		if (!master)
+			return;
+
+		let sItem = master.FindInventory("SummonExpSquishItem");
+
+		if (!sItem)
+			master.GiveInventoryType("SummonExpSquishItem");
+
+		SetStateLabel("MarkerAnimate");
 	}
 }
