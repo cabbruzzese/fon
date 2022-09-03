@@ -37,11 +37,12 @@ class fonIceRing : HNecroWeaponIceRing replaces HNecroWeaponIceRing
         ICER B 0 A_CheckMagic(ICE_LEVEL_BREATH, "Fire");
         ICER BC 3;
         ICER D 8;
+	AltHold:
         ICER E 2 A_IceRingFreeze(true);
-		ICER EEEEEEE 2 A_IceRingFreeze(false);
+		ICER EEEEE 2 A_IceRingFreeze(false);
+		ICER E 2 A_ReFire;
 		ICER FDCB 4;
 		ICER A 3;
-		ICER A 0 A_ReFire;
 		Goto Ready;
 	}
 
