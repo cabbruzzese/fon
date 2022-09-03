@@ -27,6 +27,25 @@ Your primal power that fuels transformations. This increases your morph ammo and
 
 Your bitterness and anger towards those who have crossed you. This increases your maximum ammo for magical weapons. You will learn new spell attacks when raised to certain milestones.
 
+## Weapon Enhancements
+
+### Melee
+
+There are new melee weapons. An axe that can be found on the levels and the scythe can now be used to slash your foes. Incresae your Vengeance for even greater damage.
+
+### Magical
+
+You can earn new abilities for every mage weapon by increasing Scorn. Some provide alternative fire modes, while others can be charged up for greater attacks.
+
+### Transformation
+
+Your transformations become more powerful as you increase Ferocity, gaining new attacks, improving some existing attacks, and providing ways to replenish your energy.
+
+### Heavy Weapons
+
+The grenades can now be timed by holding in the fire button. This allows more precision when preparing a throw, or the ability to time a grenade to explode in an area to get hard to target monsters.
+
+
 ## More Monsters
 
 In order to help fill the world and scale up the challenge, monsters have been beefed up and repopulate.
